@@ -40,7 +40,6 @@ const GlobalStyles = createGlobalStyle`
     flex-flow: column;
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 

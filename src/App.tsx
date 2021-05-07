@@ -1,48 +1,51 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
 import GlobalStyles from './global-styles';
+import Header from './components/header';
+import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
+import { TABLET_BP } from './constants/breakpoints';
 
-const LogoSvg = require('../public/assets/logo.svg');
+const StyledMain = styled.main`
+  margin: 0 auto;
+  max-width: 25.625rem;
+  padding: 0 1.5rem;
+  width: 100%;
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    padding: 0;
+  }
+`;
+
+interface ActionsType {
+  pomodoro: boolean;
+  shortBreak: boolean;
+  longBreak: boolean;
+}
 
 const App = () => {
+  const [actions, setActions] = useState<ActionsType>({
+    pomodoro: true,
+    shortBreak: false,
+    longBreak: false,
+  });
+
+  const handleActionChange = (event: any) => {
+    const updatedActions: ActionsType = { ...actions };
+    Object.keys(updatedActions).forEach(
+      (key) =>
+        (updatedActions[key as keyof ActionsType] =
+          event.target.id === key ? true : false)
+    );
+    setActions({ ...updatedActions });
+  };
+
   return (
     <>
       <GlobalStyles />
-      <header>
-        <img src={LogoSvg} alt='' />
-        <h1 className='sr-only'>Pomodoro</h1>
-      </header>
-      <main>
-        <div className='action-container'>
-          <div className='action-btn'>
-            <input
-              id='pomodoro'
-              type='radio'
-              name='action'
-              value='pomodoro'
-              defaultChecked
-            />
-            <label htmlFor='pomodoro'>pomodoro</label>
-          </div>
-          <div className='action-btn'>
-            <input
-              id='short-break'
-              type='radio'
-              name='action'
-              value='short break'
-            />
-            <label htmlFor='short-break'>short break</label>
-          </div>
-          <div className='action-btn'>
-            <input
-              id='long-break'
-              type='radio'
-              name='action'
-              value='long break'
-            />
-            <label htmlFor='long-break'>long break</label>
-          </div>
-        </div>
+      <Header />
+      <StyledMain>
+        <PomodoroActions actions={actions} onChange={handleActionChange} />
         <div className='timer-container'>
           <h2>start</h2>
           {/* pause
@@ -143,7 +146,7 @@ const App = () => {
             <button type='submit'>Apply</button>
           </form>
         </div>
-      </main>
+      </StyledMain>
     </>
   );
 };
