@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import GlobalStyles from './global-styles';
 import Header from './components/header';
 import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
+import Timer from './components/timer/timer';
 import { TABLET_BP } from './constants/breakpoints';
 
 const StyledMain = styled.main`
@@ -24,13 +25,42 @@ interface ActionsType {
 }
 
 const App = () => {
+  const [timerInterval, setTimerInterval] = useState(null);
+  const [totalSeconds, setTotalSeconds] = useState(25 * 60);
+  const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
+  const [startTime, setStartTime] = useState(null);
+  const [lastProgressUpdate, setLastProgressUpdate] = useState(0);
+  const [timerProgress, setTimerProgress] = useState(100);
+  const [isTiming, setIsTiming] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const [actions, setActions] = useState<ActionsType>({
     pomodoro: true,
     shortBreak: false,
     longBreak: false,
   });
 
+  useEffect(() => {
+    if (startTime === null) return;
+    setLastProgressUpdate(startTime);
+    setTimerInterval(setInterval(updateTime, 10));
+  }, [startTime]);
+
+  useEffect(() => {
+    if (Math.floor((Date.now() - lastProgressUpdate) / 1000) >= 60) {
+      setLastProgressUpdate(Date.now());
+      setTimerProgress((secondsLeft / totalSeconds) * 100);
+    }
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      setTimerInterval(null);
+      setIsFinished(true);
+    }
+  }, [secondsLeft]);
+
   const handleActionChange = (event: any) => {
+    clearInterval(timerInterval);
+    setTimerInterval(null);
+
     const updatedActions: ActionsType = { ...actions };
     Object.keys(updatedActions).forEach(
       (key) =>
@@ -38,6 +68,39 @@ const App = () => {
           event.target.id === key ? true : false)
     );
     setActions({ ...updatedActions });
+
+    if (event.target.id === 'shortBreak') {
+      setTotalSeconds(5 * 60);
+      setSecondsLeft(5 * 60);
+      setLastProgressUpdate(5 * 60);
+    } else if (event.target.id === 'longBreak') {
+      setTotalSeconds(15 * 60);
+      setSecondsLeft(15 * 60);
+      setLastProgressUpdate(15 * 60);
+    } else {
+      setTotalSeconds(25 * 60);
+      setSecondsLeft(25 * 60);
+      setLastProgressUpdate(25 * 60);
+    }
+  };
+
+  const handleStart = () => {
+    if (timerInterval) return;
+    setStartTime(Date.now());
+    setIsTiming(true);
+    setIsFinished(false);
+  };
+
+  const handlePause = () => {
+    clearInterval(timerInterval);
+    setTimerInterval(null);
+    setIsTiming(false);
+    setTotalSeconds(secondsLeft);
+  };
+
+  const updateTime = () => {
+    const diff = Math.floor((Date.now() - startTime) / 1000);
+    setSecondsLeft(totalSeconds - diff);
   };
 
   return (
@@ -46,15 +109,18 @@ const App = () => {
       <Header />
       <StyledMain>
         <PomodoroActions actions={actions} onChange={handleActionChange} />
-        <div className='timer-container'>
-          <h2>start</h2>
-          {/* pause
-  restart */}
-        </div>
-        <div className='settings-btn-row'>
+        <Timer
+          secondsLeft={secondsLeft}
+          progress={timerProgress}
+          onStart={handleStart}
+          onPause={handlePause}
+          isTiming={isTiming}
+          isFinished={isFinished}
+        />
+        {/* <div className='settings-btn-row'>
           <button type='button'>Settings</button>
-        </div>
-        <div role='dialog' className='settings-dialog'>
+        </div> */}
+        {/* <div role='dialog' className='settings-dialog'>
           <header className='flex-row'>
             <h2>Settings</h2>
             <button type='button'>close</button>
@@ -145,7 +211,7 @@ const App = () => {
             </section>
             <button type='submit'>Apply</button>
           </form>
-        </div>
+        </div> */}
       </StyledMain>
     </>
   );

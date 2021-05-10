@@ -51,14 +51,32 @@ const GlobalStyles = createGlobalStyle`
     width: 100%;
   }
 
+  // shapes 
+  .circle {
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .fill-container {
+    height: 100%;
+    width: 100%;
+  }
+
   // layout
   .flex-row {
     display: flex;
   }
 
-  .flex-column {
+  .flex-col {
     display: flex;
     flex-flow: column;
+  }
+
+  .flex-col-centered {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .space-between {
