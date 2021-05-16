@@ -14,6 +14,7 @@ const StyledPomodoroAction = styled.div`
 
   @media screen and (min-width: ${TABLET_BP}em) {
     max-width: 373px;
+    margin: 0.625rem auto 0;
   }
 `;
 
