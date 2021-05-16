@@ -5,6 +5,7 @@ import { SettingsType } from '../../types/settings';
 import { SettingsContext } from '../../providers/settings-provider';
 import Button from '../button';
 import TimeSettingsField from './time-settings-field';
+import RadioField from './radio-field';
 
 const StyledDialogBackdrop = styled.div`
   background: rgba(0, 0, 0, 0.45);
@@ -23,9 +24,8 @@ const StyledDialog = styled.div`
   color: var(--darker-blue);
   height: 100%;
   width: 88%;
-  max-height: 34.3125rem;
+  max-height: 35.0625rem;
   max-width: 33.75rem;
-  overflow-y: auto;
   position: fixed;
   top: 2.875rem;
   left: 50%;
@@ -55,6 +55,67 @@ const StyledDialog = styled.div`
     letter-spacing: 0.264375rem;
     text-align: center;
     text-transform: uppercase;
+  }
+
+  .radio-group-container {
+    justify-content: center;
+    margin-top: 1.125rem;
+  }
+
+  .font-settings-radio-container {
+    input {
+      background-color: var(--light-gray);
+    }
+
+    .isSelected input {
+      background-color: var(--darker-blue);
+    }
+  }
+
+  .color-settings-radio-container {
+    .red-orange input {
+      background-color: var(--red-orange);
+    }
+
+    .teal input {
+      background-color: var(--teal);
+    }
+
+    .violet input {
+      background-color: var(--violet);
+    }
+  }
+
+  .sans-font {
+    font-family: var(--font-family-sans);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .serif-font {
+    font-family: var(--font-family-serif);
+    font-weight: var(--font-weight-normal);
+  }
+
+  .mono-font {
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .apply-btn {
+    appearance: none;
+    background: var(--red-orange);
+    border: none;
+    border-radius: 1.65625rem;
+    display: block;
+    color: white;
+    font-family: var(--font-family-sans);
+    font-weight: var(--font-weight-bold);
+    font-size: 1rem;
+    height: 3.3125rem;
+    width: 8.75rem;
+    margin: 0.5rem auto 0;
+    position: relative;
+    z-index: 1;
   }
 `;
 
@@ -99,6 +160,14 @@ const RulesDialog = ({ onClose }: { onClose: () => void }) => {
       : event.field === 'shortBreak'
       ? setSettingsCopy({ ...settingsCopy, shortBreak: newVal })
       : setSettingsCopy({ ...settingsCopy, longBreak: newVal });
+  };
+
+  const handleFontChange = (event: any) => {
+    setSettingsCopy({ ...settingsCopy, font: event.currentTarget.value });
+  };
+
+  const handleColorChange = (event: any) => {
+    setSettingsCopy({ ...settingsCopy, color: event.currentTarget.value });
   };
 
   return (
@@ -160,69 +229,81 @@ const RulesDialog = ({ onClose }: { onClose: () => void }) => {
           </section>
           <section className='settings-form-section settings-form-section__font'>
             <h3 className='settings-form-section__heading'>Font</h3>
-            <div className='font-settings-radio-container flex-row'>
-              <div className='font-choice'>
-                <input
-                  type='radio'
-                  name='font'
-                  id='sans'
-                  value='sans'
-                  defaultChecked
-                />
-                <label className='sans-font-label' htmlFor='sans'>
-                  Aa
-                </label>
-              </div>
-              <div className='font-choice'>
-                <input type='radio' name='font' id='serif' value='serif' />
-                <label className='serif-font-label' htmlFor='serif'>
-                  Aa
-                </label>
-              </div>
-              <div className='font-choice'>
-                <input type='radio' name='font' id='mono' value='mono' />
-                <label className='mono-font-label' htmlFor='mono'>
-                  Aa
-                </label>
-              </div>
+            <div className='radio-group-container font-settings-radio-container flex-row align-center'>
+              <RadioField
+                className={`sans-font ${
+                  settingsCopy.font === 'sans' ? 'isSelected' : ''
+                }`}
+                id='sans'
+                name='font'
+                value='sans'
+                isSelected={settingsCopy.font === 'sans'}
+                label='Aa'
+                onChange={handleFontChange}
+              />
+              <RadioField
+                className={`serif-font ${
+                  settingsCopy.font === 'serif' ? 'isSelected' : ''
+                }`}
+                id='serif'
+                name='font'
+                value='serif'
+                isSelected={settingsCopy.font === 'serif'}
+                label='Aa'
+                onChange={handleFontChange}
+              />
+              <RadioField
+                className={`mono-font ${
+                  settingsCopy.font === 'mono' ? 'isSelected' : ''
+                }`}
+                id='mono'
+                name='font'
+                value='mono'
+                isSelected={settingsCopy.font === 'mono'}
+                label='Aa'
+                onChange={handleFontChange}
+              />
             </div>
           </section>
           <section className='settings-form-section settings-form-section__color'>
             <h3 className='settings-form-section__heading'>Color</h3>
-            <div className='color-settings-radio-container flex-row'>
-              <div className='color-choice'>
-                <input
-                  type='radio'
-                  name='color'
-                  id='orange-red'
-                  value='orange-red'
-                  aria-label='orange-red'
-                  defaultChecked
-                />
-              </div>
-              <div className='color-choice'>
-                <input
-                  type='radio'
-                  name='color'
-                  id='teal'
-                  value='teal'
-                  aria-label='teal'
-                />
-              </div>
-              <div className='color-choice'>
-                <input
-                  type='radio'
-                  name='color'
-                  id='violet'
-                  value='violet'
-                  aria-label='violet'
-                />
-              </div>
+            <div className='radio-group-container color-settings-radio-container flex-row'>
+              <RadioField
+                className='red-orange'
+                id='red-orange'
+                name='color'
+                value='red-orange'
+                isSelected={settingsCopy.color === 'red-orange'}
+                onChange={handleColorChange}
+                aria-label='red-orange color'
+              />
+              <RadioField
+                className='teal'
+                id='teal'
+                name='color'
+                value='teal'
+                isSelected={settingsCopy.color === 'teal'}
+                onChange={handleColorChange}
+                aria-label='teal color'
+              />
+              <RadioField
+                className='violet'
+                id='violet'
+                name='color'
+                value='violet'
+                isSelected={settingsCopy.color === 'violet'}
+                onChange={handleColorChange}
+                aria-label='violet color'
+              />
             </div>
           </section>
-          <button type='submit' onClick={handleSaveSettings}>
+          <Button
+            className='apply-btn'
+            type='submit'
+            onClick={handleSaveSettings}
+          >
             Apply
-          </button>
+          </Button>
         </form>
       </StyledDialog>
     </>
