@@ -4,7 +4,7 @@
   "scripts": {
     "watch": "webpack --watch",
     "start": "webpack serve --open --env NODE_ENV=development",
-    "build": "webpack"
+    "build": "webpack --env NODE_ENV=production"
   },
   "private": true,
   "author": "Matthias Smith",
