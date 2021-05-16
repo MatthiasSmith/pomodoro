@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import GlobalStyles from './global-styles';
 import Header from './components/header';
 import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
 import Timer from './components/timer/timer';
+import SettingsDialog from './components/settings/settings-dialog';
+import Button from './components/button';
 import { TABLET_BP } from './constants/breakpoints';
+import { SettingsContext } from './providers/settings-provider';
+
+const SettingsIcon = require('../public/assets/icon-settings.svg');
 
 const StyledMain = styled.main`
   margin: 0 auto;
@@ -18,6 +23,10 @@ const StyledMain = styled.main`
   }
 `;
 
+const StyledSettingsRow = styled.div`
+  margin-top: 4.9375rem;
+`;
+
 interface ActionsType {
   pomodoro: boolean;
   shortBreak: boolean;
@@ -25,8 +34,9 @@ interface ActionsType {
 }
 
 const App = () => {
+  const { settings } = useContext(SettingsContext);
   const [timerInterval, setTimerInterval] = useState(null);
-  const [totalSeconds, setTotalSeconds] = useState(25 * 60);
+  const [totalSeconds, setTotalSeconds] = useState(settings.pomodoro * 60);
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [startTime, setStartTime] = useState(null);
   const [lastProgressUpdate, setLastProgressUpdate] = useState(0);
@@ -38,6 +48,7 @@ const App = () => {
     shortBreak: false,
     longBreak: false,
   });
+  const [areSettingsOpen, setAreSettingsOpen] = useState(true);
 
   useEffect(() => {
     if (startTime === null) return;
@@ -57,6 +68,30 @@ const App = () => {
     }
   }, [secondsLeft]);
 
+  // update ui with new settings
+  useEffect(() => {
+    setIsFinished(false);
+
+    if (actions.pomodoro) {
+      setTotalSeconds(settings.pomodoro * 60);
+      setSecondsLeft(settings.pomodoro * 60);
+    } else if (actions.shortBreak) {
+      setTotalSeconds(settings.shortBreak * 60);
+      setSecondsLeft(settings.shortBreak * 60);
+    } else {
+      setTotalSeconds(settings.longBreak * 60);
+      setSecondsLeft(settings.longBreak * 60);
+    }
+
+    if (isTiming) {
+      clearInterval(timerInterval);
+      setTimerInterval(null);
+      setLastProgressUpdate(0);
+      setIsTiming(false);
+      setStartTime(null);
+    }
+  }, [settings]);
+
   const handleActionChange = (event: any) => {
     clearInterval(timerInterval);
     setTimerInterval(null);
@@ -70,17 +105,17 @@ const App = () => {
     setActions({ ...updatedActions });
 
     if (event.target.id === 'shortBreak') {
-      setTotalSeconds(5 * 60);
-      setSecondsLeft(5 * 60);
-      setLastProgressUpdate(5 * 60);
+      setTotalSeconds(settings.shortBreak * 60);
+      setSecondsLeft(settings.shortBreak * 60);
+      setLastProgressUpdate(settings.shortBreak * 60);
     } else if (event.target.id === 'longBreak') {
-      setTotalSeconds(15 * 60);
-      setSecondsLeft(15 * 60);
-      setLastProgressUpdate(15 * 60);
+      setTotalSeconds(settings.longBreak * 60);
+      setSecondsLeft(settings.longBreak * 60);
+      setLastProgressUpdate(settings.longBreak * 60);
     } else {
-      setTotalSeconds(25 * 60);
-      setSecondsLeft(25 * 60);
-      setLastProgressUpdate(25 * 60);
+      setTotalSeconds(settings.pomodoro * 60);
+      setSecondsLeft(settings.pomodoro * 60);
+      setLastProgressUpdate(settings.pomodoro * 60);
     }
   };
 
@@ -96,6 +131,14 @@ const App = () => {
     setTimerInterval(null);
     setIsTiming(false);
     setTotalSeconds(secondsLeft);
+  };
+
+  const handleOpenSettings = () => {
+    setAreSettingsOpen(true);
+  };
+
+  const handleCloseSettings = () => {
+    setAreSettingsOpen(false);
   };
 
   const updateTime = () => {
@@ -117,101 +160,12 @@ const App = () => {
           isTiming={isTiming}
           isFinished={isFinished}
         />
-        {/* <div className='settings-btn-row'>
-          <button type='button'>Settings</button>
-        </div> */}
-        {/* <div role='dialog' className='settings-dialog'>
-          <header className='flex-row'>
-            <h2>Settings</h2>
-            <button type='button'>close</button>
-          </header>
-          <form className='settings-form'>
-            <section className='time-settings-section'>
-              <h3>Time (minutes)</h3>
-              <div className='select-container'>
-                <label htmlFor='pomodoro-select'>pomodoro</label>
-                <select name='pomodoro' id='pomodoro-select'>
-                  25
-                </select>
-              </div>
-              <div className='select-container'>
-                <label htmlFor='short-break-select'>short break</label>
-                <select name='short-break' id='short-break-select'>
-                  5
-                </select>
-              </div>
-              <div className='select-container'>
-                <label htmlFor='long-break-select'>long break</label>
-                <select name='long-break' id='long-break-select'>
-                  15
-                </select>
-              </div>
-            </section>
-            <section className='font-settings-section flex-row'>
-              <h3>Font</h3>
-              <div className='font-settings-radio-container'>
-                <div className='font-choice'>
-                  <input
-                    type='radio'
-                    name='font'
-                    id='sans'
-                    value='sans'
-                    defaultChecked
-                  />
-                  <label className='sans-font-label' htmlFor='sans'>
-                    Aa
-                  </label>
-                </div>
-                <div className='font-choice'>
-                  <input type='radio' name='font' id='serif' value='serif' />
-                  <label className='serif-font-label' htmlFor='serif'>
-                    Aa
-                  </label>
-                </div>
-                <div className='font-choice'>
-                  <input type='radio' name='font' id='mono' value='mono' />
-                  <label className='mono-font-label' htmlFor='mono'>
-                    Aa
-                  </label>
-                </div>
-              </div>
-            </section>
-            <section className='color-settings-container flex-row'>
-              <h3>Color</h3>
-              <div className='color-settings-radio-container'>
-                <div className='color-choice'>
-                  <input
-                    type='radio'
-                    name='color'
-                    id='orange-red'
-                    value='orange-red'
-                    aria-label='orange-red'
-                    defaultChecked
-                  />
-                </div>
-                <div className='color-choice'>
-                  <input
-                    type='radio'
-                    name='color'
-                    id='teal'
-                    value='teal'
-                    aria-label='teal'
-                  />
-                </div>
-                <div className='color-choice'>
-                  <input
-                    type='radio'
-                    name='color'
-                    id='violet'
-                    value='violet'
-                    aria-label='violet'
-                  />
-                </div>
-              </div>
-            </section>
-            <button type='submit'>Apply</button>
-          </form>
-        </div> */}
+        <StyledSettingsRow className='settings-btn-row flex-row justify-center'>
+          <Button title='settings' onClick={handleOpenSettings}>
+            <img src={SettingsIcon} alt='Open the settings dialog' />
+          </Button>
+        </StyledSettingsRow>
+        {areSettingsOpen && <SettingsDialog onClose={handleCloseSettings} />}
       </StyledMain>
     </>
   );
