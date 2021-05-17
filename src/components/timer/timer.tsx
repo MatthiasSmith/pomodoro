@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import ProgressRing from './progress-ring';
 
@@ -24,14 +24,37 @@ const StyledTimer = styled.div`
   }
 
   .content-container {
-    margin-top: 5.375rem;
+    height: 100%;
   }
 
   .timer-label {
+    ${(props) =>
+      props.theme.fontFamily === 'var(--font-family-serif)'
+        ? css`
+            font-family: var(--font-family-serif);
+            font-weight: var(--font-weight-bold);
+            line-height: 6.59375rem;
+            margin-top: 0.75rem;
+          `
+        : props.theme.fontFamily === 'var(--font-family-mono)'
+        ? css`
+            font-family: var(--font-family-mono);
+            font-weight: var(--font-weight-normal);
+            letter-spacing: -0.625rem;
+            line-height: 7.40625rem;
+            margin-top: 0.75rem;
+            margin-right: 0.5rem;
+          `
+        : css`
+            font-family: var(--font-family-sans);
+            font-weight: var(--font-weight-bold);
+            letter-spacing: -0.25rem;
+            line-height: 5rem;
+            margin-top: 1.75rem;
+            margin-right: 0.25rem;
+          `}
+
     font-size: 5rem;
-    font-weight: var(--font-weight-bold);
-    letter-spacing: -0.25rem;
-    line-height: 5rem;
     text-align: center;
   }
 
@@ -42,10 +65,10 @@ const StyledTimer = styled.div`
     cursor: pointer;
     color: var(--light-blue);
     display: block;
-    font-family: var(--font-family-sans);
     font-size: 0.875rem;
+    font-weight: var(--font-weight-bold);
     letter-spacing: 0.820625rem;
-    margin: 0.75rem auto 0;
+    margin: 0 auto;
     padding-left: 0.820625rem;
     position: relative;
     text-align: center;
@@ -53,8 +76,25 @@ const StyledTimer = styled.div`
     transition: color 0.3s ease-out;
     z-index: 1;
 
+    ${(props) =>
+      props.theme.fontFamily === 'var(--font-family-serif)'
+        ? css`
+            font-family: var(--font-family-serif);
+            line-height: 1.15625rem;
+          `
+        : props.theme.fontFamily === 'var(--font-family-mono)'
+        ? css`
+            font-family: var(--font-family-mono);
+            line-height: 1.295625rem;
+          `
+        : css`
+            font-family: var(--font-family-sans);
+            line-height: 0.875rem;
+            margin-top: 0.75rem;
+          `}
+
     &:hover {
-      color: var(--color-primary);
+      color: ${(props) => props.theme.primaryColor};
     }
   }
 `;
@@ -69,7 +109,7 @@ const StyledProgressRing = styled(ProgressRing)`
     transition: stroke-dashoffset 0.35s ease-out;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
-    stroke: var(--color-primary);
+    stroke: ${(props) => props.theme.primaryColor};
   }
 `;
 
@@ -104,7 +144,7 @@ const Timer = ({
       <div className='timer-circle-container flex-col-centered fill-container circle'>
         <div className='timer-progress-circle flex-col fill-container circle'>
           <StyledProgressRing radius={137.51} stroke={9} progress={progress} />
-          <div className='content-container'>
+          <div className='content-container flex-col justify-center'>
             <h2 className='timer-label'>
               <span className='timer-label__minutes'>
                 {minutes < 10 ? `0${minutes}` : minutes}

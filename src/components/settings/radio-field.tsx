@@ -50,10 +50,10 @@ const StyledRadioField = styled.div<RadioFieldType>`
 
   .radio-field__checkmark {
     background: none;
-    border-bottom: solid 3px var(--darker-blue);
-    border-left: solid 3px var(--darker-blue);
+    border-bottom: solid 2px var(--darker-blue);
+    border-left: solid 2px var(--darker-blue);
     box-sizing: unset;
-    height: 5px;
+    height: 4px;
     width: 12px;
     left: 50%;
     top: 44%;

@@ -103,7 +103,7 @@ const StyledDialog = styled.div`
 
   .apply-btn {
     appearance: none;
-    background: var(--red-orange);
+    background-color: var(--red-orange);
     border: none;
     border-radius: 1.65625rem;
     display: block;
@@ -116,10 +116,15 @@ const StyledDialog = styled.div`
     margin: 0.5rem auto 0;
     position: relative;
     z-index: 1;
+    transition: background-color 0.3s ease-out;
+
+    &:hover {
+      background-color: var(--light-red-orange);
+    }
   }
 `;
 
-const RulesDialog = ({ onClose }: { onClose: () => void }) => {
+const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
   const {
     settings,
     setSettings,
@@ -310,4 +315,4 @@ const RulesDialog = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-export default RulesDialog;
+export default SettingsDialog;

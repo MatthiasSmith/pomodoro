@@ -21,7 +21,8 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
     width: 100%;
 
     &:checked {
-      background-color: var(--color-primary);
+      background-color: ${(props) =>
+        props.theme.primaryColor}; //var(--color-primary);
     }
   }
 
@@ -29,6 +30,7 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
     color: ${(props) =>
       props.isSelected ? 'var(--dark-blue)' : 'var(--light-blue)'};
     cursor: pointer;
+    font-family: ${(props) => props.theme.fontFamily};
     font-size: 0.75rem;
     font-weight: var(--font-weight-bold);
     line-height: 0.75rem;

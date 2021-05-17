@@ -10,7 +10,7 @@ const GlobalStyles = createGlobalStyle`
 
     // colors
     --red-orange: #F87070;
-    --light-red-orange: #F87070;
+    --light-red-orange: #FA8686;
     --teal: #70F3F8;
     --violet: #D881F8;
     --light-blue: #D7E0FF;
