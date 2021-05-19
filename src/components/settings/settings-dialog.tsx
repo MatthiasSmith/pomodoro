@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { SettingsType } from '../../types/settings';
@@ -9,17 +9,42 @@ import RadioField from './radio-field';
 import { TABLET_BP } from '../../constants/breakpoints';
 
 const StyledDialogBackdrop = styled.div`
+  animation: fade-in 0.5s ease-out 0s forwards;
   background: rgba(0, 0, 0, 0.45);
   height: 100%;
   width: 100%;
+  opacity: 0;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9;
+
+  &.close {
+    animation: fade-out 0.5s ease-out 0s forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 `;
 
 const StyledDialog = styled.div`
+  animation: slide-in 0.5s cubic-bezier(0.31, 1.18, 0.75, 1.08) 0s forwards;
   background: white;
   border-radius: 0.9375rem;
   color: var(--darker-blue);
@@ -30,8 +55,30 @@ const StyledDialog = styled.div`
   position: fixed;
   top: 2.875rem;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -100%);
   z-index: 10;
+
+  &.close {
+    animation: slide-out 0.5s cubic-bezier(0.42, -0.18, 0.82, 0.18) 0s forwards;
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translate(-50%, 150%);
+    }
+    to {
+      transform: translate(-50%, 0%);
+    }
+  }
+
+  @keyframes slide-out {
+    from {
+      transform: translate(-50%, 0%);
+    }
+    to {
+      transform: translate(-50%, 150%);
+    }
+  }
 
   .settings-header-row {
     padding: 1.5rem 1.5rem 1.75rem;
@@ -132,7 +179,25 @@ const StyledDialog = styled.div`
     border-radius: 1.5625rem;
     max-height: 29rem;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 100%);
+
+    @keyframes slide-in {
+      from {
+        transform: translate(-50%, 150%);
+      }
+      to {
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @keyframes slide-out {
+      from {
+        transform: translate(-50%, -50%);
+      }
+      to {
+        transform: translate(-50%, 150%);
+      }
+    }
 
     .settings-header-row {
       padding: 2.125rem 2.5rem 2rem;
@@ -186,20 +251,32 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
 
-  useEffect(() => dialogRef.current.focus(), []);
+  const handleAnimationEnd = (event: any) => {
+    event.stopPropagation();
+    if (event.animationName === 'slide-in') {
+      dialogRef.current.focus();
+    } else if (event.animationName === 'slide-out') {
+      onClose();
+    }
+  };
+
+  const handleClose = () => {
+    backdropRef.current.classList.add('close');
+    dialogRef.current.classList.add('close');
+  };
 
   const handleKeyUp = (event: any) => {
     event.stopPropagation();
 
     if (event.key === 'Escape') {
-      onClose();
+      handleClose();
     }
   };
 
   const handleSaveSettings = (event: any) => {
     event.preventDefault();
     setSettings({ ...settingsCopy });
-    onClose();
+    handleClose();
   };
 
   const handleTimeChange = (event: any) => {
@@ -230,6 +307,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
         ref={dialogRef}
         tabIndex={-1}
         onKeyUp={handleKeyUp}
+        onAnimationEnd={handleAnimationEnd}
         role='dialog'
         aria-labelledby='settingsHeading'
       >
@@ -239,7 +317,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
           </h2>
           <Button
             type='button'
-            onClick={onClose}
+            onClick={handleClose}
             aria-label='Close settings dialog'
           >
             <svg
