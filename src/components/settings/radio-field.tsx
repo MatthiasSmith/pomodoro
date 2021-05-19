@@ -31,8 +31,7 @@ const StyledRadioField = styled.div<RadioFieldType>`
     z-index: -1;
   }
 
-  &:hover::before,
-  &:focus-within::before {
+  &:hover::before {
     opacity: 1;
   }
 
@@ -99,6 +98,7 @@ const RadioField = ({
   isSelected,
   onChange,
   className,
+  ariaLabel,
 }: {
   id: string;
   name: string;
@@ -107,6 +107,7 @@ const RadioField = ({
   onChange: Function;
   label?: string;
   className?: string;
+  ariaLabel?: string;
 }) => {
   const handleChange = (event: any) => {
     onChange(event);
@@ -122,9 +123,10 @@ const RadioField = ({
         value={value}
         checked={isSelected}
         onChange={handleChange}
+        aria-label={ariaLabel || undefined}
       />
       {label ? (
-        <label htmlFor={id} className='radio-field__label'>
+        <label aria-hidden={true} htmlFor={id} className='radio-field__label'>
           {label}
         </label>
       ) : (

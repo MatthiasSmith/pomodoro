@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 import { SettingsType } from '../../types/settings';
 import { SettingsContext } from '../../providers/settings-provider';
+import { TABLET_BP } from '../../constants/breakpoints';
 import Button from '../button';
 import TimeSettingsField from './time-settings-field';
 import RadioField from './radio-field';
-import { TABLET_BP } from '../../constants/breakpoints';
 
 const StyledDialogBackdrop = styled.div`
   animation: fade-in 0.5s ease-out 0s forwards;
@@ -44,7 +44,7 @@ const StyledDialogBackdrop = styled.div`
 `;
 
 const StyledDialog = styled.div`
-  animation: slide-in 0.5s cubic-bezier(0.31, 1.18, 0.75, 1.08) 0s forwards;
+  animation: slide-in 0.5s cubic-bezier(0.31, 1.18, 0.64, 1.05) 0s forwards;
   background: white;
   border-radius: 0.9375rem;
   color: var(--darker-blue);
@@ -137,6 +137,7 @@ const StyledDialog = styled.div`
   .font-settings-radio-container {
     input {
       background-color: var(--light-gray);
+      transition: all 0.3s ease-out;
     }
 
     .isSelected input {
@@ -405,6 +406,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 isSelected={settingsCopy.font === 'sans'}
                 label='Aa'
                 onChange={handleFontChange}
+                ariaLabel={'sans font'}
               />
               <RadioField
                 className={`serif-font ${
@@ -416,6 +418,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 isSelected={settingsCopy.font === 'serif'}
                 label='Aa'
                 onChange={handleFontChange}
+                ariaLabel={'serif font'}
               />
               <RadioField
                 className={`mono-font ${
@@ -427,6 +430,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 isSelected={settingsCopy.font === 'mono'}
                 label='Aa'
                 onChange={handleFontChange}
+                ariaLabel={'mono font'}
               />
             </div>
           </section>
@@ -440,7 +444,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 value='red-orange'
                 isSelected={settingsCopy.color === 'red-orange'}
                 onChange={handleColorChange}
-                aria-label='red-orange color'
+                ariaLabel='red-orange color'
               />
               <RadioField
                 className='teal'
@@ -449,7 +453,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 value='teal'
                 isSelected={settingsCopy.color === 'teal'}
                 onChange={handleColorChange}
-                aria-label='teal color'
+                ariaLabel='teal color'
               />
               <RadioField
                 className='violet'
@@ -458,7 +462,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 value='violet'
                 isSelected={settingsCopy.color === 'violet'}
                 onChange={handleColorChange}
-                aria-label='violet color'
+                ariaLabel='violet color'
               />
             </div>
           </section>
@@ -466,6 +470,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
             className='apply-btn'
             type='submit'
             onClick={handleSaveSettings}
+            aria-label='Apply changes and close the settings dialog'
           >
             Apply
           </Button>

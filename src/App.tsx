@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import GlobalStyles from './global-styles';
@@ -36,9 +36,6 @@ const StyledSettingsRow = styled.div`
 
   .open-settings-btn:focus {
     outline: none;
-  }
-
-  .open-settings-btn:focus-visible {
     border-radius: 0.25rem;
     box-shadow: 0rem 0rem 0rem 0.125rem var(--darker-blue),
       0rem 0rem 0rem 0.25rem rgba(255, 255, 255, 0.38);
@@ -75,7 +72,8 @@ const App = () => {
     shortBreak: false,
     longBreak: false,
   });
-  const [areSettingsOpen, setAreSettingsOpen] = useState(false);
+  const [areSettingsOpen, setAreSettingsOpen] = useState(true);
+  const settingsBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (startTime === null) return;
@@ -144,6 +142,12 @@ const App = () => {
         : 'var(--red-orange)';
     setTheme({ ...Theme });
   }, [settings]);
+
+  // re-focus the settings btn when the dialog is closed
+  useEffect(
+    () => !areSettingsOpen && settingsBtnRef.current.focus(),
+    [areSettingsOpen]
+  );
 
   const handleActionChange = (event: any) => {
     clearInterval(timerInterval);
@@ -222,6 +226,7 @@ const App = () => {
               onClick={handleOpenSettings}
               aria-label='Open settings dialog'
               className='open-settings-btn'
+              ref={settingsBtnRef}
             >
               <svg
                 aria-hidden={true}
