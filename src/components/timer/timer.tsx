@@ -99,6 +99,18 @@ const StyledTimer = styled.div`
     &:hover {
       color: ${(props) => props.theme.primaryColor};
     }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      color: ${(props) => props.theme.primaryColor};
+      outline: none;
+      border-radius: 0.125rem;
+      box-shadow: 0rem 0rem 0rem 0.185rem var(--darker-blue),
+        0rem 0rem 0rem 0.285rem rgba(255, 255, 255, 0.38);
+    }
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {

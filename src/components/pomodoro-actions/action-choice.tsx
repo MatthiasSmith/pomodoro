@@ -26,6 +26,15 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
       background-color: ${(props) =>
         props.theme.primaryColor}; //var(--color-primary);
     }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: 0rem 0rem 0rem 0.125rem var(--darker-blue),
+        0rem 0rem 0rem 0.25rem rgba(255, 255, 255, 0.38);
+    }
   }
 
   .action-choice__label {

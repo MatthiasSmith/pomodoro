@@ -15,18 +15,25 @@ const StyledRadioField = styled.div<RadioFieldType>`
     margin-left: 1rem;
   }
 
-  &:hover::before {
+  &:before {
     background: transparent;
     border: 1px solid var(--light-gray);
     border-radius: 50%;
     content: '';
+    opacity: 0;
     position: absolute;
     height: 3.125rem;
     width: 3.125rem;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    transition: opacity 0.18s ease-out;
     z-index: -1;
+  }
+
+  &:hover::before,
+  &:focus-within::before {
+    opacity: 1;
   }
 
   .radio-field__input {
@@ -35,6 +42,15 @@ const StyledRadioField = styled.div<RadioFieldType>`
     border-radius: 50%;
     height: 2.5rem;
     width: 2.5rem;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: 0rem 0rem 0rem 0.185rem white,
+        0rem 0rem 0rem 0.285rem var(--focus-blue);
+    }
   }
 
   .radio-field__label {
@@ -49,18 +65,29 @@ const StyledRadioField = styled.div<RadioFieldType>`
   }
 
   .radio-field__checkmark {
+    animation: scale-in 0.18s ease-out 0s forwards;
     background: none;
     border-bottom: solid 2px var(--darker-blue);
     border-left: solid 2px var(--darker-blue);
     box-sizing: unset;
-    height: 4px;
-    width: 12px;
+    height: 0.25rem;
+    width: 0.625rem;
     left: 50%;
-    top: 44%;
+    top: 50%;
     margin-top: -6px;
     position: absolute;
-    transform: rotate(-45deg) translate(-50%, -50%);
-    transition: transform 0.1s ease-out;
+    transform: scale(0) rotate(-45deg) translate(-50%, -50%);
+    transform-origin: left bottom;
+
+    @keyframes scale-in {
+      from {
+        transform: scale(0) rotate(-45deg) translate(-50%, -50%);
+      }
+      to {
+        transform: scale(1) rotate(-45deg) translate(-50%, -50%);
+        transform-origin: 50% 50%;
+      }
+    }
   }
 `;
 

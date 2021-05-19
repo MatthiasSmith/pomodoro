@@ -17,6 +17,7 @@ const GlobalStyles = createGlobalStyle`
     --dark-blue: #1E213F;
     --darker-blue: #161932;
     --light-gray: #EFF1FA;
+    --focus-blue: #1e5ee6;
 
     --color-primary: var(--red-orange);
   }

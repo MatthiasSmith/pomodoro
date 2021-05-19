@@ -44,12 +44,23 @@ const StyledTimerField = styled.div`
       appearance: none;
       margin: 0;
     }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0rem 0rem 0rem 0.125rem var(--focus-blue);
+    }
   }
 
   .arrow-btn {
     position: absolute;
     right: 1rem;
     z-index: 1;
+
+    &:focus {
+      outline: none;
+      border-radius: 0.125rem;
+      box-shadow: 0rem 0rem 0rem 0.125rem var(--focus-blue);
+    }
 
     &:hover svg > path {
       stroke-opacity: 1;

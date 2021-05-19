@@ -29,8 +29,19 @@ const StyledSettingsRow = styled.div`
     transition: opacity 0.3s ease-out;
   }
 
-  .open-settings-btn:hover svg > path {
+  .open-settings-btn:hover svg > path,
+  .open-settings-btn:focus svg > path {
     opacity: 0.85;
+  }
+
+  .open-settings-btn:focus {
+    outline: none;
+  }
+
+  .open-settings-btn:focus-visible {
+    border-radius: 0.25rem;
+    box-shadow: 0rem 0rem 0rem 0.125rem var(--darker-blue),
+      0rem 0rem 0rem 0.25rem rgba(255, 255, 255, 0.38);
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
@@ -60,7 +71,7 @@ const App = () => {
     shortBreak: false,
     longBreak: false,
   });
-  const [areSettingsOpen, setAreSettingsOpen] = useState(true);
+  const [areSettingsOpen, setAreSettingsOpen] = useState(false);
 
   useEffect(() => {
     if (startTime === null) return;

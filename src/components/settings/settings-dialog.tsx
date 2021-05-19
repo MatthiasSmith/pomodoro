@@ -58,6 +58,12 @@ const StyledDialog = styled.div`
   transform: translate(-50%, -100%);
   z-index: 10;
 
+  &:focus {
+    outline: none;
+    box-shadow: 0rem 0rem 0rem 0.185rem rgba(0, 0, 0, 0.45),
+      0rem 0rem 0rem 0.25rem rgb(93, 96, 184);
+  }
+
   &.close {
     animation: slide-out 0.5s cubic-bezier(0.42, -0.18, 0.82, 0.18) 0s forwards;
   }
@@ -86,6 +92,20 @@ const StyledDialog = styled.div`
 
   .settings-heading {
     font-size: 1.5rem;
+  }
+
+  .close-btn {
+    height: 28px;
+    width: 28px;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      border-radius: 0.25rem;
+      box-shadow: 0rem 0rem 0rem 0.125rem var(--focus-blue);
+    }
   }
 
   .settings-form {
@@ -172,6 +192,15 @@ const StyledDialog = styled.div`
 
     &:hover {
       background-color: var(--light-red-orange);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      background-color: var(--light-red-orange);
+      box-shadow: 0rem 0rem 0rem 0.135rem var(--focus-blue);
     }
   }
 
@@ -317,6 +346,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
           </h2>
           <Button
             type='button'
+            className='close-btn'
             onClick={handleClose}
             aria-label='Close settings dialog'
           >
