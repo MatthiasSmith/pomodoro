@@ -6,6 +6,7 @@ import { SettingsContext } from '../../providers/settings-provider';
 import Button from '../button';
 import TimeSettingsField from './time-settings-field';
 import RadioField from './radio-field';
+import { TABLET_BP } from '../../constants/breakpoints';
 
 const StyledDialogBackdrop = styled.div`
   background: rgba(0, 0, 0, 0.45);
@@ -34,6 +35,10 @@ const StyledDialog = styled.div`
 
   .settings-header-row {
     padding: 1.5rem 1.5rem 1.75rem;
+  }
+
+  .settings-heading {
+    font-size: 1.5rem;
   }
 
   .settings-form {
@@ -122,6 +127,51 @@ const StyledDialog = styled.div`
       background-color: var(--light-red-orange);
     }
   }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    border-radius: 1.5625rem;
+    max-height: 29rem;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    .settings-header-row {
+      padding: 2.125rem 2.5rem 2rem;
+    }
+
+    .settings-heading {
+      font-size: 1.75rem;
+    }
+
+    .settings-form {
+      padding: 0 2.5rem;
+    }
+
+    .settings-form-section:not(.settings-form-section__time) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .settings-form-section__heading {
+      font-size: 0.8125rem;
+      letter-spacing: 0.3125rem;
+      text-align: left;
+    }
+
+    .time-fields__container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.375rem;
+    }
+
+    .radio-group-container {
+      margin-top: 0;
+    }
+
+    .apply-btn {
+      margin: 0.7rem auto 0;
+    }
+  }
 `;
 
 const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
@@ -136,9 +186,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
 
-  useEffect(() => {
-    dialogRef.current.focus();
-  }, []);
+  useEffect(() => dialogRef.current.focus(), []);
 
   const handleKeyUp = (event: any) => {
     event.stopPropagation();
@@ -183,10 +231,12 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
         tabIndex={-1}
         onKeyUp={handleKeyUp}
         role='dialog'
-        aria-labelledby='settingsHeader'
+        aria-labelledby='settingsHeading'
       >
         <div className='settings-header-row flex-row space-between'>
-          <h2 id='settingsHeader'>Settings</h2>
+          <h2 id='settingsHeading' className='settings-heading'>
+            Settings
+          </h2>
           <Button
             type='button'
             onClick={onClose}
@@ -210,27 +260,29 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
         <form className='settings-form'>
           <section className='settings-form-section settings-form-section__time'>
             <h3 className='settings-form-section__heading'>Time (minutes)</h3>
-            <TimeSettingsField
-              id='pomodoro-timer-input'
-              name='pomodoro'
-              label='pomodoro'
-              value={settingsCopy.pomodoro}
-              onChange={handleTimeChange}
-            />
-            <TimeSettingsField
-              id='short-break-timer-input'
-              name='shortBreak'
-              label='short break'
-              value={settingsCopy.shortBreak}
-              onChange={handleTimeChange}
-            />
-            <TimeSettingsField
-              id='long-break-timer-input'
-              name='longBreak'
-              label='long break'
-              value={settingsCopy.longBreak}
-              onChange={handleTimeChange}
-            />
+            <div className='time-fields__container'>
+              <TimeSettingsField
+                id='pomodoro-timer-input'
+                name='pomodoro'
+                label='pomodoro'
+                value={settingsCopy.pomodoro}
+                onChange={handleTimeChange}
+              />
+              <TimeSettingsField
+                id='short-break-timer-input'
+                name='shortBreak'
+                label='short break'
+                value={settingsCopy.shortBreak}
+                onChange={handleTimeChange}
+              />
+              <TimeSettingsField
+                id='long-break-timer-input'
+                name='longBreak'
+                label='long break'
+                value={settingsCopy.longBreak}
+                onChange={handleTimeChange}
+              />
+            </div>
           </section>
           <section className='settings-form-section settings-form-section__font'>
             <h3 className='settings-form-section__heading'>Font</h3>

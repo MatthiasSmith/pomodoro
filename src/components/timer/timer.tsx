@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+
+import { TABLET_BP } from '../../constants/breakpoints';
 
 import ProgressRing from './progress-ring';
 
 const StyledTimer = styled.div`
   background-color: var(--darker-blue);
-  box-shadow: inset -20px -20px 1.5rem 0.5rem rgba(255, 255, 255, 0.08),
-    -20px -20px 3.5rem -0.5rem rgba(255, 255, 255, 0.08),
-    20px 20px 3.5rem -0.5rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem rgba(255, 255, 255, 0.08),
+    -1.35rem -1.35rem 3.5rem -0.5rem rgba(255, 255, 255, 0.08),
+    1.5rem 1.5rem 3.5rem -0.25rem rgba(0, 0, 0, 0.5);
   margin: 2.8125rem auto 0;
   height: 18.75rem;
   width: 18.75rem;
@@ -50,7 +52,7 @@ const StyledTimer = styled.div`
             font-weight: var(--font-weight-bold);
             letter-spacing: -0.25rem;
             line-height: 5rem;
-            margin-top: 1.75rem;
+            margin-top: 2rem;
             margin-right: 0.25rem;
           `}
 
@@ -81,6 +83,7 @@ const StyledTimer = styled.div`
         ? css`
             font-family: var(--font-family-serif);
             line-height: 1.15625rem;
+            margin-top: 0.5rem;
           `
         : props.theme.fontFamily === 'var(--font-family-mono)'
         ? css`
@@ -97,19 +100,52 @@ const StyledTimer = styled.div`
       color: ${(props) => props.theme.primaryColor};
     }
   }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem rgba(255, 255, 255, 0.08),
+      -2.55rem -2.55rem 4.75rem -2rem rgba(255, 255, 255, 0.08),
+      2.55rem 2.55rem 4.75rem -0.5rem rgba(0, 0, 0, 0.5);
+    width: 25.625rem;
+    height: 25.625rem;
+    margin: 6.8125rem auto 0;
+    padding: 1.375rem;
+
+    .timer-circle-container {
+      padding: 0.84375rem;
+    }
+
+    .timer-label {
+      font-size: 6.25rem;
+      line-height: ${(props) =>
+        props.theme.fontFamily === 'var(--font-family-serif)'
+          ? '8.2425rem'
+          : props.theme.fontFamily === 'var(--font-family-mono)'
+          ? '9.25625rem'
+          : '6.25rem'};
+    }
+
+    .timer-btn {
+      font-size: 1rem;
+    }
+  }
 `;
 
 const StyledProgressRing = styled(ProgressRing)`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(-90deg);
 
   circle {
-    transition: stroke-dashoffset 0.35s ease-out;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
     stroke: ${(props) => props.theme.primaryColor};
+    stroke-width: 0.5625rem;
+    transition: stroke-dashoffset 0.35s ease-out;
+  }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    circle {
+      stroke-width: 0.6875rem;
+    }
   }
 `;
 
@@ -128,8 +164,14 @@ const Timer = ({
   isTiming: boolean;
   isFinished: boolean;
 }) => {
+  const [radius, setRadius] = useState(137.51);
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft - minutes * 60;
+
+  useEffect(() => {
+    const isSmScreen = document.documentElement.clientWidth < TABLET_BP * 16;
+    setRadius(isSmScreen ? 137.51 : 180.5);
+  }, []);
 
   const handleStart = () => {
     onStart();
@@ -143,16 +185,11 @@ const Timer = ({
     <StyledTimer className='timer-container flex-col-centered circle'>
       <div className='timer-circle-container flex-col-centered fill-container circle'>
         <div className='timer-progress-circle flex-col fill-container circle'>
-          <StyledProgressRing radius={137.51} stroke={9} progress={progress} />
+          <StyledProgressRing radius={radius} stroke={9} progress={progress} />
           <div className='content-container flex-col justify-center'>
-            <h2 className='timer-label'>
-              <span className='timer-label__minutes'>
-                {minutes < 10 ? `0${minutes}` : minutes}
-              </span>
-              :
-              <span className='timer-label__seconds'>
-                {seconds < 10 ? `0${seconds}` : seconds}
-              </span>
+            <h2 className='timer-label' role='timer' aria-live='polite'>
+              {minutes < 10 ? `0${minutes}` : minutes}:
+              {seconds < 10 ? `0${seconds}` : seconds}
             </h2>
             {isFinished ? (
               <button type='button' className='timer-btn' onClick={handleStart}>

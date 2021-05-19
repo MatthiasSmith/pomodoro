@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { TABLET_BP } from '../../constants/breakpoints';
+
 interface ActionChoiceProps {
   isSelected?: boolean;
 }
@@ -41,6 +43,17 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease-out;
     white-space: nowrap;
+  }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    .action-choice__radio {
+      min-width: 7.5rem;
+    }
+
+    .action-choice__label {
+      font-size: 0.875rem;
+      line-height: 0.875rem;
+    }
   }
 `;
 

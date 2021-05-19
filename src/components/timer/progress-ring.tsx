@@ -18,9 +18,7 @@ const ProgressRing = ({
   return (
     <svg height={radius * 2} width={radius * 2} className={className}>
       <circle
-        stroke='red'
         fill='transparent'
-        strokeWidth={stroke}
         strokeDasharray={circumference + ' ' + circumference}
         style={{ strokeDashoffset }}
         strokeLinecap='round'

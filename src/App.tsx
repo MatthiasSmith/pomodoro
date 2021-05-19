@@ -23,7 +23,7 @@ const StyledMain = styled.main`
 `;
 
 const StyledSettingsRow = styled.div`
-  margin-top: 4.9375rem;
+  margin: 4.9375rem auto 3rem;
 
   .open-settings-btn svg > path {
     transition: opacity 0.3s ease-out;
@@ -31,6 +31,10 @@ const StyledSettingsRow = styled.div`
 
   .open-settings-btn:hover svg > path {
     opacity: 0.85;
+  }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    margin: 9rem auto 6.4375rem;
   }
 `;
 
@@ -56,7 +60,7 @@ const App = () => {
     shortBreak: false,
     longBreak: false,
   });
-  const [areSettingsOpen, setAreSettingsOpen] = useState(false);
+  const [areSettingsOpen, setAreSettingsOpen] = useState(true);
 
   useEffect(() => {
     if (startTime === null) return;
@@ -80,18 +84,29 @@ const App = () => {
   useEffect(() => {
     setIsFinished(false);
 
+    // only reset time if current action timing has changed
+    let hasTimingChanged = false;
     if (actions.pomodoro) {
-      setTotalSeconds(settings.pomodoro * 60);
-      setSecondsLeft(settings.pomodoro * 60);
+      if (totalSeconds !== settings.pomodoro * 60) {
+        setTotalSeconds(settings.pomodoro * 60);
+        setSecondsLeft(settings.pomodoro * 60);
+        hasTimingChanged = true;
+      }
     } else if (actions.shortBreak) {
-      setTotalSeconds(settings.shortBreak * 60);
-      setSecondsLeft(settings.shortBreak * 60);
+      if (totalSeconds !== settings.shortBreak * 60) {
+        setTotalSeconds(settings.shortBreak * 60);
+        setSecondsLeft(settings.shortBreak * 60);
+        hasTimingChanged = true;
+      }
     } else {
-      setTotalSeconds(settings.longBreak * 60);
-      setSecondsLeft(settings.longBreak * 60);
+      if (totalSeconds !== settings.longBreak * 60) {
+        setTotalSeconds(settings.longBreak * 60);
+        setSecondsLeft(settings.longBreak * 60);
+        hasTimingChanged = true;
+      }
     }
 
-    if (isTiming) {
+    if (isTiming && hasTimingChanged) {
       clearInterval(timerInterval);
       setTimerInterval(null);
       setLastProgressUpdate(0);

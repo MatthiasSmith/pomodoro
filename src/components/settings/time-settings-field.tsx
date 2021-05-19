@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import { TABLET_BP } from '../../constants/breakpoints';
 import Button from '../button';
 
-const UpArrowIcon = require('../../../public/assets/icon-arrow-up.svg');
-
 const StyledTimerField = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   &:first-of-type {
     margin-top: 1.125rem;
   }
@@ -63,6 +67,35 @@ const StyledTimerField = styled.div`
       transition: stroke-opacity 0.2s ease-out;
     }
   }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    flex-flow: column;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    &:first-of-type,
+    &:not(:first-of-type) {
+      margin-top: 0;
+    }
+
+    .field-input__container {
+      margin-top: 0.5rem;
+    }
+
+    .field-input {
+      height: 3rem;
+    }
+
+    .arrow-btn {
+      &__up {
+        top: 0.55rem;
+      }
+
+      &__down {
+        bottom: 0.55rem;
+      }
+    }
+  }
 `;
 
 const TimeSettingsField = ({
@@ -86,7 +119,7 @@ const TimeSettingsField = ({
   };
 
   return (
-    <StyledTimerField className='flex-row align-center space-between'>
+    <StyledTimerField>
       <label className='field-label' htmlFor={id}>
         {label}
       </label>
