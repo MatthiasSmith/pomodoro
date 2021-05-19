@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { TABLET_BP, DESKTOP_BP } from '../../constants/breakpoints';
+import Button from '../button';
 import ProgressRing from './progress-ring';
 
 const pseudoElementMixin = css`
@@ -19,12 +20,12 @@ const pseudoElementMixin = css`
 `;
 
 const StyledTimer = styled.div`
-  --shadow-light-blue: rgba(215, 224, 255, 0.08);
+  --shadow-light-blue: rgba(215, 224, 255, 0.09);
 
   border-radius: 50%;
   background-color: var(--darker-blue);
-  box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem var(--shadow-light-blue),
-    -1.35rem -1.35rem 3.5rem -0.5rem var(--shadow-light-blue),
+  box-shadow: inset -1.5rem -1.5rem 1.5rem 0.5rem var(--shadow-light-blue),
+    -1.5rem -1.5rem 3.5rem -0.5rem var(--shadow-light-blue),
     1.5rem 1.5rem 3.5rem -0.25rem rgba(0, 0, 0, 0.5);
   margin: 2.8125rem auto 0;
   height: 18.75rem;
@@ -60,20 +61,22 @@ const StyledTimer = styled.div`
     }
   }
 
-  .timer-circle-container {
+  .timer__circle-container {
     background-color: var(--darker-blue);
     padding: 0.6175rem;
   }
 
-  .timer-progress-circle {
+  .timer__progress-circle {
     background: var(--darker-blue);
   }
 
   .content-container {
     height: 100%;
+    position: relative;
+    z-index: 1;
   }
 
-  .timer-label {
+  .timer__label {
     ${(props) =>
       props.theme.fontFamily === 'var(--font-family-serif)'
         ? css`
@@ -104,7 +107,7 @@ const StyledTimer = styled.div`
     text-align: center;
   }
 
-  .timer-btn {
+  .timer__btn {
     appearance: none;
     background: none;
     border: none;
@@ -158,7 +161,7 @@ const StyledTimer = styled.div`
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
-    box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem var(--shadow-light-blue),
+    box-shadow: inset -2.55rem -2.55rem 1.5rem 0.5rem var(--shadow-light-blue),
       -2.55rem -2.55rem 4.75rem -2rem var(--shadow-light-blue),
       2.55rem 2.55rem 4.75rem -0.5rem rgba(0, 0, 0, 0.5);
     width: 25.625rem;
@@ -166,11 +169,11 @@ const StyledTimer = styled.div`
     margin: 6.8125rem auto 0;
     padding: 1.375rem;
 
-    .timer-circle-container {
+    .timer__circle-container {
       padding: 0.84375rem;
     }
 
-    .timer-label {
+    .timer__label {
       font-size: 6.25rem;
       line-height: ${(props) =>
         props.theme.fontFamily === 'var(--font-family-serif)'
@@ -180,7 +183,7 @@ const StyledTimer = styled.div`
           : '6.25rem'};
     }
 
-    .timer-btn {
+    .timer__btn {
       font-size: 1rem;
     }
   }
@@ -195,6 +198,7 @@ const StyledProgressRing = styled(ProgressRing)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-90deg);
+  z-index: 0;
 
   circle {
     stroke: ${(props) => props.theme.primaryColor};
@@ -210,6 +214,7 @@ const StyledProgressRing = styled(ProgressRing)`
 `;
 
 const Timer = ({
+  actionType,
   secondsLeft,
   progress,
   onStart,
@@ -217,6 +222,7 @@ const Timer = ({
   isTiming,
   isFinished,
 }: {
+  actionType: string;
   secondsLeft: number;
   progress: number;
   onStart: Function;
@@ -224,50 +230,90 @@ const Timer = ({
   isTiming: boolean;
   isFinished: boolean;
 }) => {
-  const [radius, setRadius] = useState(137.51);
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft - minutes * 60;
+  const [ariaMinutesLeft, setAriaMinutesLeft] = useState(minutes);
+  const [ariaSecondsLeft, setAriaSecondsLeft] = useState(seconds);
+  const [radius, setRadius] = useState(137.51);
 
   useEffect(() => {
     const isSmScreen = document.documentElement.clientWidth < TABLET_BP * 16;
     setRadius(isSmScreen ? 137.51 : 180.5);
   }, []);
 
-  const handleStart = () => {
-    onStart();
-  };
+  // update the aria timer so it will announce the change
+  useEffect(() => {
+    const mins = Math.floor(secondsLeft / 60);
+    setAriaMinutesLeft(mins);
+    setAriaSecondsLeft(secondsLeft - mins * 60);
+  }, [progress, actionType]);
 
-  const handlePause = () => {
-    onPause();
+  const handleClick = () => {
+    if (!isTiming || isFinished) {
+      onStart();
+    } else {
+      const mins = Math.floor(secondsLeft / 60);
+      setAriaMinutesLeft(mins);
+      setAriaSecondsLeft(secondsLeft - mins * 60);
+      onPause();
+    }
   };
 
   return (
     <StyledTimer
-      className={`timer-container flex-col-centered ${
+      className={`timer__container flex-col-centered ${
         isTiming ? 'active' : ''
       }`}
     >
-      <div className='timer-circle-container flex-col-centered fill-container circle'>
-        <div className='timer-progress-circle flex-col fill-container circle'>
+      <div className='timer__circle-container flex-col-centered fill-container circle'>
+        <div className='timer__progress-circle flex-col fill-container circle'>
           <StyledProgressRing radius={radius} stroke={9} progress={progress} />
           <div className='content-container flex-col justify-center'>
-            <h2 className='timer-label' role='timer' aria-live='polite'>
+            {isFinished ? (
+              <span className='sr-only' role='alert' aria-live='assertive'>
+                Your {actionType} timer has finished. Would you like to restart
+                it?
+              </span>
+            ) : isTiming ? (
+              <span className='sr-only' role='alert' aria-live='assertive'>
+                {actionType} timer started. Counting down from{' '}
+                {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes'}
+                {ariaSecondsLeft > 0 && ' ' + ariaSecondsLeft + ' seconds'}
+              </span>
+            ) : (
+              <span
+                className='sr-only'
+                role='alert'
+                aria-live='assertive'
+                aria-atomic={true}
+              >
+                {actionType} timer paused at
+                {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes '}
+                {ariaSecondsLeft > 0 && ariaSecondsLeft + ' seconds'}
+              </span>
+            )}
+            <h2
+              className='sr-only'
+              role='timer'
+              aria-atomic='true'
+              aria-live='assertive'
+            >
+              {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes '}
+              {ariaSecondsLeft > 0 && ariaSecondsLeft + ' seconds'} remain
+            </h2>
+            <h2 className='timer__label' aria-hidden={true}>
               {minutes < 10 ? `0${minutes}` : minutes}:
               {seconds < 10 ? `0${seconds}` : seconds}
             </h2>
-            {isFinished ? (
-              <button type='button' className='timer-btn' onClick={handleStart}>
-                restart
-              </button>
-            ) : isTiming ? (
-              <button type='button' className='timer-btn' onClick={handlePause}>
-                pause
-              </button>
-            ) : (
-              <button type='button' className='timer-btn' onClick={handleStart}>
-                start
-              </button>
-            )}
+            <Button
+              className='timer__btn'
+              onClick={handleClick}
+              aria-label={`${
+                isFinished ? 'restart' : isTiming ? 'pause' : 'start'
+              } the timer`}
+            >
+              {isFinished ? 'restart' : isTiming ? 'pause' : 'start'}
+            </Button>
           </div>
         </div>
       </div>

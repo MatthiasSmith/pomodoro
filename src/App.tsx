@@ -72,15 +72,17 @@ const App = () => {
     shortBreak: false,
     longBreak: false,
   });
-  const [areSettingsOpen, setAreSettingsOpen] = useState(true);
+  const [areSettingsOpen, setAreSettingsOpen] = useState(null);
   const settingsBtnRef = useRef<HTMLButtonElement>(null);
 
+  // start the countdown
   useEffect(() => {
     if (startTime === null) return;
     setLastProgressUpdate(startTime);
     setTimerInterval(setInterval(updateTime, 10));
   }, [startTime]);
 
+  // update timer progress
   useEffect(() => {
     if (Math.floor((Date.now() - lastProgressUpdate) / 1000) >= 60) {
       setLastProgressUpdate(Date.now());
@@ -145,7 +147,7 @@ const App = () => {
 
   // re-focus the settings btn when the dialog is closed
   useEffect(
-    () => !areSettingsOpen && settingsBtnRef.current.focus(),
+    () => areSettingsOpen === false && settingsBtnRef.current.focus(),
     [areSettingsOpen]
   );
 
@@ -213,6 +215,13 @@ const App = () => {
         <StyledMain>
           <PomodoroActions actions={actions} onChange={handleActionChange} />
           <Timer
+            actionType={
+              actions.pomodoro
+                ? 'pomodoro'
+                : actions.shortBreak
+                ? 'short break'
+                : 'long break'
+            }
             secondsLeft={secondsLeft}
             progress={timerProgress}
             onStart={handleStart}
