@@ -1,20 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { TABLET_BP } from '../../constants/breakpoints';
-
+import { TABLET_BP, DESKTOP_BP } from '../../constants/breakpoints';
 import ProgressRing from './progress-ring';
 
+const pseudoElementMixin = css`
+  border-radius: 50%;
+  box-shadow: 0rem 0rem 2.5rem 0.25rem var(--shadow-light-blue);
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transform: scale(0.75);
+  z-index: -1;
+`;
+
 const StyledTimer = styled.div`
+  --shadow-light-blue: rgba(215, 224, 255, 0.08);
+
+  border-radius: 50%;
   background-color: var(--darker-blue);
-  box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem rgba(255, 255, 255, 0.08),
-    -1.35rem -1.35rem 3.5rem -0.5rem rgba(255, 255, 255, 0.08),
+  box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem var(--shadow-light-blue),
+    -1.35rem -1.35rem 3.5rem -0.5rem var(--shadow-light-blue),
     1.5rem 1.5rem 3.5rem -0.25rem rgba(0, 0, 0, 0.5);
   margin: 2.8125rem auto 0;
   height: 18.75rem;
   width: 18.75rem;
   padding: 1.00625rem;
   position: relative;
+
+  &.active::before {
+    ${pseudoElementMixin}
+    animation: ripple-out 1.5s cubic-bezier(.11,.45,.72,1) 0s forwards;
+  }
+
+  &.active::after {
+    ${pseudoElementMixin}
+    animation: ripple-out 2s cubic-bezier(.11,.45,.72,1) 0s forwards;
+  }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    &.active::before,
+    &.active::after {
+      display: none;
+    }
+  }
+
+  @keyframes ripple-out {
+    from {
+      transform: scale(0.75);
+      opacity: 1;
+    }
+    to {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+  }
 
   .timer-circle-container {
     background-color: var(--darker-blue);
@@ -114,8 +158,8 @@ const StyledTimer = styled.div`
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
-    box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem rgba(255, 255, 255, 0.08),
-      -2.55rem -2.55rem 4.75rem -2rem rgba(255, 255, 255, 0.08),
+    box-shadow: inset -1.25rem -1.25rem 1.5rem 0.5rem var(--shadow-light-blue),
+      -2.55rem -2.55rem 4.75rem -2rem var(--shadow-light-blue),
       2.55rem 2.55rem 4.75rem -0.5rem rgba(0, 0, 0, 0.5);
     width: 25.625rem;
     height: 25.625rem;
@@ -139,6 +183,10 @@ const StyledTimer = styled.div`
     .timer-btn {
       font-size: 1rem;
     }
+  }
+
+  @media screen and (min-width: ${DESKTOP_BP}em) {
+    margin: 2.8125rem auto 0;
   }
 `;
 
@@ -194,7 +242,11 @@ const Timer = ({
   };
 
   return (
-    <StyledTimer className='timer-container flex-col-centered circle'>
+    <StyledTimer
+      className={`timer-container flex-col-centered ${
+        isTiming ? 'active' : ''
+      }`}
+    >
       <div className='timer-circle-container flex-col-centered fill-container circle'>
         <div className='timer-progress-circle flex-col fill-container circle'>
           <StyledProgressRing radius={radius} stroke={9} progress={progress} />
