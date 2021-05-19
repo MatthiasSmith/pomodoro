@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { TABLET_BP, DESKTOP_BP } from '../constants/breakpoints';
+
 const LogoSvg = require('../../public/assets/logo.svg');
 
 const StyledHeader = styled.header`
@@ -10,6 +12,14 @@ const StyledHeader = styled.header`
   .logo-image {
     height: 32px;
     width: 153px;
+  }
+
+  @media screen and (min-width: ${TABLET_BP}em) {
+    padding: 5rem 0 2.625rem;
+  }
+
+  @media screen and (min-width: ${DESKTOP_BP}em) {
+    padding: 3rem 0 2.625rem;
   }
 `;
 

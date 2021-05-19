@@ -8,13 +8,12 @@ const StyledPomodoroAction = styled.div`
   background-color: var(--darker-blue);
   border-radius: 1.96875rem;
   height: 3.9375rem;
-  margin-top: 0.625rem; //0.8125rem;
+  margin: 0.8125rem auto 0;
   padding: 0.5rem 0.375rem;
   width: 100%;
 
   @media screen and (min-width: ${TABLET_BP}em) {
-    max-width: 373px;
-    margin: 0.625rem auto 0;
+    max-width: 23.3125rem;
   }
 `;
 

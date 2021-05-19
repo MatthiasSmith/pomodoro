@@ -8,7 +8,7 @@ import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
 import Timer from './components/timer/timer';
 import SettingsDialog from './components/settings/settings-dialog';
 import Button from './components/button';
-import { TABLET_BP } from './constants/breakpoints';
+import { DESKTOP_BP, TABLET_BP } from './constants/breakpoints';
 import { SettingsContext } from './providers/settings-provider';
 
 const StyledMain = styled.main`
@@ -46,6 +46,10 @@ const StyledSettingsRow = styled.div`
 
   @media screen and (min-width: ${TABLET_BP}em) {
     margin: 9rem auto 6.4375rem;
+  }
+
+  @media screen and (min-width: ${DESKTOP_BP}em) {
+    margin: 3.9375rem auto 3.5rem;
   }
 `;
 
