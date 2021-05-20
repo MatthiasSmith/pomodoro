@@ -19,7 +19,7 @@ const pseudoElementMixin = css`
   z-index: -1;
 `;
 
-const StyledTimer = styled.div`
+const StyledTimerButton = styled(Button)`
   border-radius: 50%;
   background: var(--timer-gradient); //var(--darker-blue);
   box-shadow: var(--timer-shadow);
@@ -43,6 +43,24 @@ const StyledTimer = styled.div`
     animation: ripple 2s cubic-bezier(.11,.45,.72,1) 0.3s forwards;
   }
 
+  &:hover {
+    .timer__action-label {
+      color: ${(props) => props.theme.primaryColor};
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible .timer__action-label {
+    color: ${(props) => props.theme.primaryColor};
+    outline: none;
+    border-radius: 0.125rem;
+    box-shadow: 0rem 0rem 0rem 0.185rem var(--darker-blue),
+      0rem 0rem 0rem 0.285rem rgba(255, 255, 255, 0.38);
+  }
+
   @media screen and (prefers-reduced-motion: reduce) {
     &.active::before,
     &.active::after {
@@ -61,20 +79,28 @@ const StyledTimer = styled.div`
 
   .timer__circle-container {
     background-color: var(--darker-blue);
+    height: 16.7375rem;
+    width: 16.7375rem;
     padding: 0.6175rem;
   }
 
   .timer__progress-circle {
+    height: 15.503125rem;
+    width: 15.503125rem;
     background: var(--darker-blue);
   }
 
-  .content-container {
+  .timer__content-container {
     height: 100%;
     position: relative;
     z-index: 1;
   }
 
-  .timer__label {
+  .timer__time-label {
+    color: var(--light-blue);
+    font-size: 5rem;
+    text-align: center;
+
     ${(props) =>
       props.theme.fontFamily === 'var(--font-family-serif)'
         ? css`
@@ -100,18 +126,10 @@ const StyledTimer = styled.div`
             margin-top: 2rem;
             margin-right: 0.25rem;
           `}
-
-    font-size: 5rem;
-    text-align: center;
   }
 
-  .timer__btn {
-    appearance: none;
-    background: none;
-    border: none;
-    cursor: pointer;
+  .timer__action-label {
     color: var(--light-blue);
-    display: block;
     font-size: 0.875rem;
     font-weight: var(--font-weight-bold);
     letter-spacing: 0.820625rem;
@@ -140,22 +158,6 @@ const StyledTimer = styled.div`
             line-height: 0.875rem;
             margin-top: 0.75rem;
           `}
-
-    &:hover {
-      color: ${(props) => props.theme.primaryColor};
-    }
-
-    &:focus {
-      outline: none;
-    }
-
-    &:focus-visible {
-      color: ${(props) => props.theme.primaryColor};
-      outline: none;
-      border-radius: 0.125rem;
-      box-shadow: 0rem 0rem 0rem 0.185rem var(--darker-blue),
-        0rem 0rem 0rem 0.285rem rgba(255, 255, 255, 0.38);
-    }
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
@@ -165,10 +167,18 @@ const StyledTimer = styled.div`
     padding: 1.375rem;
 
     .timer__circle-container {
+      height: 22.875rem;
+      width: 22.875rem;
       padding: 0.84375rem;
     }
 
-    .timer__label {
+    .timer__progress-circle {
+      height: 21.1875rem;
+      width: 21.1875rem;
+      padding: 0.84375rem;
+    }
+
+    .timer__time-label {
       font-size: 6.25rem;
       line-height: ${(props) =>
         props.theme.fontFamily === 'var(--font-family-serif)'
@@ -178,7 +188,7 @@ const StyledTimer = styled.div`
           : '6.25rem'};
     }
 
-    .timer__btn {
+    .timer__action-label {
       font-size: 1rem;
     }
   }
@@ -255,15 +265,17 @@ const Timer = ({
   };
 
   return (
-    <StyledTimer
-      className={`timer__container flex-col-centered ${
-        isTiming ? 'active' : ''
-      }`}
+    <StyledTimerButton
+      onClick={handleClick}
+      className={`timer flex-col-centered ${isTiming ? 'active' : ''}`}
+      aria-label={`${
+        isFinished ? 'restart' : isTiming ? 'pause' : 'start'
+      } the timer`}
     >
-      <div className='timer__circle-container flex-col-centered fill-container circle'>
-        <div className='timer__progress-circle flex-col fill-container circle'>
+      <div className='timer__circle-container flex-col-centered circle'>
+        <div className='timer__progress-circle flex-col-centered circle'>
           <StyledProgressRing radius={radius} stroke={9} progress={progress} />
-          <div className='content-container flex-col justify-center'>
+          <div className='timer__content-container flex-col justify-center'>
             {isFinished ? (
               <span className='sr-only' role='alert' aria-live='assertive'>
                 Your {actionType} timer has finished. Would you like to restart
@@ -296,23 +308,17 @@ const Timer = ({
               {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes '}
               {ariaSecondsLeft > 0 && ariaSecondsLeft + ' seconds'} remain
             </h2>
-            <h2 className='timer__label' aria-hidden={true}>
+            <h2 className='timer__time-label' aria-hidden={true}>
               {minutes < 10 ? `0${minutes}` : minutes}:
               {seconds < 10 ? `0${seconds}` : seconds}
             </h2>
-            <Button
-              className='timer__btn'
-              onClick={handleClick}
-              aria-label={`${
-                isFinished ? 'restart' : isTiming ? 'pause' : 'start'
-              } the timer`}
-            >
+            <h3 className='timer__action-label'>
               {isFinished ? 'restart' : isTiming ? 'pause' : 'start'}
-            </Button>
+            </h3>
           </div>
         </div>
       </div>
-    </StyledTimer>
+    </StyledTimerButton>
   );
 };
 

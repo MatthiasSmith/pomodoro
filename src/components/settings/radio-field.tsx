@@ -49,6 +49,7 @@ const StyledRadioField = styled.div<RadioFieldType>`
   .radio-field__input {
     appearance: none;
     cursor: pointer;
+    border: none;
     border-radius: 50%;
     height: 2.5rem;
     width: 2.5rem;

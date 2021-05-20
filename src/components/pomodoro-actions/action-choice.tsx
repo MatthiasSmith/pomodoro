@@ -17,6 +17,7 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
 
   .action-choice__radio {
     appearance: none;
+    border: none;
     border-radius: 1.65625rem;
     cursor: pointer;
     height: 3rem;
