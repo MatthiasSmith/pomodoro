@@ -135,19 +135,19 @@ const App = () => {
     }
 
     // update theme
-    Theme.fontFamily =
+    theme.fontFamily =
       settings.font === 'serif'
         ? 'var(--font-family-serif)'
         : settings.font === 'mono'
         ? 'var(--font-family-mono)'
         : 'var(--font-family-sans)';
-    Theme.primaryColor =
+    theme.primaryColor =
       settings.color === 'teal'
         ? 'var(--teal)'
         : settings.color === 'violet'
         ? 'var(--violet)'
         : 'var(--red-orange)';
-    setTheme({ ...Theme });
+    setTheme({ ...theme });
   }, [settings]);
 
   // re-focus the settings btn when the dialog is closed
@@ -228,7 +228,7 @@ const App = () => {
     <>
       <GlobalStyles />
       <Header />
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <StyledMain>
           <PomodoroActions actions={actions} onChange={handleActionChange} />
           <Timer
