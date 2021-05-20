@@ -137,7 +137,7 @@ const StyledDialog = styled.div`
   .font-settings-radio-container {
     input {
       background-color: var(--light-gray);
-      transition: all 0.3s ease-out;
+      transition: background-color 0.3s ease-out;
     }
 
     .isSelected input {

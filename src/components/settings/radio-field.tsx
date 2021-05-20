@@ -61,6 +61,7 @@ const StyledRadioField = styled.div<RadioFieldType>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: color 0.3s ease-out;
   }
 
   .radio-field__checkmark {
