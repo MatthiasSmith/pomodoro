@@ -222,6 +222,7 @@ const Timer = ({
   actionType,
   secondsLeft,
   progress,
+  lastProgressUpdate,
   onStart,
   onPause,
   isTiming,
@@ -230,6 +231,7 @@ const Timer = ({
   actionType: string;
   secondsLeft: number;
   progress: number;
+  lastProgressUpdate: number;
   onStart: Function;
   onPause: Function;
   isTiming: boolean;
@@ -251,7 +253,7 @@ const Timer = ({
     const mins = Math.floor(secondsLeft / 60);
     setAriaMinutesLeft(mins);
     setAriaSecondsLeft(secondsLeft - mins * 60);
-  }, [progress, actionType]);
+  }, [lastProgressUpdate, actionType]);
 
   const handleClick = () => {
     if (!isTiming || isFinished) {

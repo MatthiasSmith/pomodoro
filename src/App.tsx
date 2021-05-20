@@ -83,15 +83,17 @@ const App = () => {
   useEffect(() => {
     if (startTime === null) return;
     setLastProgressUpdate(startTime);
-    setTimerInterval(setInterval(updateTime, 10));
+    setTimerInterval(setInterval(updateTime, 20));
   }, [startTime]);
 
   // update timer progress
   useEffect(() => {
+    setTimerProgress((secondsLeft / getCurrentActionSeconds()) * 100);
+
     if (Math.floor((Date.now() - lastProgressUpdate) / 1000) >= 60) {
       setLastProgressUpdate(Date.now());
-      setTimerProgress((secondsLeft / totalSeconds) * 100);
     }
+
     if (secondsLeft <= 0) {
       clearInterval(timerInterval);
       setTimerInterval(null);
@@ -156,14 +158,16 @@ const App = () => {
     [areSettingsOpen]
   );
 
-  const handleActionChange = (event: any) => {
+  const getCurrentActionSeconds = () => {
     const currentlyActive = Object.keys(actions).filter(
       (key) => actions[key as keyof ActionsType]
     );
+    return Number(settings[currentlyActive[0] as keyof SettingsType]) * 60;
+  };
+
+  const handleActionChange = (event: any) => {
     if (
-      (isTiming ||
-        secondsLeft <
-          Number(settings[currentlyActive[0] as keyof SettingsType]) * 60) &&
+      (isTiming || secondsLeft < getCurrentActionSeconds()) &&
       !confirm(
         'By switching timers you will interrupt your countdown progress.\n\nWould you like to continue anyways?'
       )
@@ -241,6 +245,7 @@ const App = () => {
             }
             secondsLeft={secondsLeft}
             progress={timerProgress}
+            lastProgressUpdate={lastProgressUpdate}
             onStart={handleStart}
             onPause={handlePause}
             isTiming={isTiming}
