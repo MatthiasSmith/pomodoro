@@ -95,6 +95,7 @@ const App = () => {
       clearInterval(timerInterval);
       setTimerInterval(null);
       setIsFinished(true);
+      setIsTiming(false);
     }
   }, [secondsLeft]);
 
