@@ -9,6 +9,7 @@ interface ActionChoiceProps {
 
 const StyledActionChoice = styled.div<ActionChoiceProps>`
   position: relative;
+  z-index: 1;
 
   &:hover .action-choice__label {
     opacity: 1;
@@ -21,11 +22,6 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
     height: 3rem;
     min-width: 6.5625rem;
     width: 100%;
-
-    &:checked {
-      background-color: ${(props) =>
-        props.theme.primaryColor}; //var(--color-primary);
-    }
 
     &:focus {
       outline: none;
@@ -50,7 +46,7 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out, color 0.3s ease-out;
     white-space: nowrap;
   }
 

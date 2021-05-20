@@ -1,19 +1,53 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import ActionChoice from './action-choice';
+import ActionsType from '../../types/actions';
 import { TABLET_BP } from '../../constants/breakpoints';
 
-const StyledPomodoroAction = styled.div`
+interface ActionProps {
+  actions: ActionsType;
+}
+
+const StyledPomodoroAction = styled.div<ActionProps>`
   background-color: var(--darker-blue);
   border-radius: 1.96875rem;
   height: 3.9375rem;
   margin: 0.8125rem auto 0;
   padding: 0.5rem 0.375rem;
   width: 100%;
+  position: relative;
+
+  .shifting-marker {
+    border-radius: 1.65625rem;
+    position: absolute;
+    top: 0.5rem;
+    left: 0.375rem;
+    width: 6.5625rem;
+    height: 3rem;
+    background: ${(props) => props.theme.primaryColor};
+    transform: ${(props) =>
+      props.actions.pomodoro
+        ? 'translateX(0rem)'
+        : props.actions.shortBreak
+        ? 'translateX(7.65rem)'
+        : 'translateX(15.3rem)'};
+    transition: transform 0.3s ease-out;
+    z-index: 0;
+  }
 
   @media screen and (min-width: ${TABLET_BP}em) {
     max-width: 23.3125rem;
+
+    .shifting-marker {
+      width: 7.5rem;
+      transform: ${(props) =>
+        props.actions.pomodoro
+          ? 'translateX(0rem)'
+          : props.actions.shortBreak
+          ? 'translateX(7.5rem)'
+          : 'translateX(15rem)'};
+    }
   }
 `;
 
@@ -25,7 +59,7 @@ const PomodoroActions = ({
   onChange: Function;
 }) => {
   return (
-    <StyledPomodoroAction className='flex-row space-between'>
+    <StyledPomodoroAction actions={actions} className='flex-row space-between'>
       <ActionChoice
         id='pomodoro'
         name='action'
@@ -47,6 +81,7 @@ const PomodoroActions = ({
         isSelected={actions.longBreak}
         onChange={onChange}
       />
+      <div className='shifting-marker'></div>
     </StyledPomodoroAction>
   );
 };

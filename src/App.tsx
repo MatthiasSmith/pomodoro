@@ -8,6 +8,7 @@ import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
 import Timer from './components/timer/timer';
 import SettingsDialog from './components/settings/settings-dialog';
 import Button from './components/button';
+import ActionsType from './types/actions';
 import { DESKTOP_BP, TABLET_BP } from './constants/breakpoints';
 import { SettingsContext } from './providers/settings-provider';
 
@@ -49,12 +50,6 @@ const StyledSettingsRow = styled.div`
     margin: 3.9375rem auto 3.5rem;
   }
 `;
-
-interface ActionsType {
-  pomodoro: boolean;
-  shortBreak: boolean;
-  longBreak: boolean;
-}
 
 const App = () => {
   const { settings } = useContext(SettingsContext);
