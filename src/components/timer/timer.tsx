@@ -7,40 +7,40 @@ import ProgressRing from './progress-ring';
 
 const pseudoElementMixin = css`
   border-radius: 50%;
-  box-shadow: 0rem 0rem 2.5rem 0.25rem var(--shadow-light-blue);
+  box-shadow: 0rem 0rem 2.7rem 0.35rem #363b6f;
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 1;
-  transform: scale(0.75);
+  opacity: 0;
+  transform: scale(1);
   z-index: -1;
 `;
 
 const StyledTimer = styled.div`
-  --shadow-light-blue: rgba(215, 224, 255, 0.09);
-
   border-radius: 50%;
-  background-color: var(--darker-blue);
-  box-shadow: inset -1.5rem -1.5rem 1.5rem 0.5rem var(--shadow-light-blue),
-    -1.5rem -1.5rem 3.5rem -0.5rem var(--shadow-light-blue),
-    1.5rem 1.5rem 3.5rem -0.25rem rgba(0, 0, 0, 0.5);
+  background: var(--timer-gradient); //var(--darker-blue);
+  box-shadow: var(--timer-shadow);
   margin: 2.8125rem auto 0;
   height: 18.75rem;
   width: 18.75rem;
   padding: 1.00625rem;
   position: relative;
 
+  &.active {
+    animation: shrink 0.2s ease-in-out 0s 2 alternate;
+  }
+
   &.active::before {
     ${pseudoElementMixin}
-    animation: ripple-out 1.5s cubic-bezier(.11,.45,.72,1) 0s forwards;
+    animation: ripple 1.5s cubic-bezier(.11,.45,.72,1) 0.3s forwards;
   }
 
   &.active::after {
     ${pseudoElementMixin}
-    animation: ripple-out 2s cubic-bezier(.11,.45,.72,1) 0s forwards;
+    animation: ripple 2s cubic-bezier(.11,.45,.72,1) 0.3s forwards;
   }
 
   @media screen and (prefers-reduced-motion: reduce) {
@@ -50,14 +50,12 @@ const StyledTimer = styled.div`
     }
   }
 
-  @keyframes ripple-out {
+  @keyframes shrink {
     from {
-      transform: scale(0.75);
-      opacity: 1;
+      transform: scale(1);
     }
     to {
-      transform: scale(1.75);
-      opacity: 0;
+      transform: scale(0.96);
     }
   }
 
@@ -161,9 +159,6 @@ const StyledTimer = styled.div`
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
-    box-shadow: inset -2.55rem -2.55rem 1.5rem 0.5rem var(--shadow-light-blue),
-      -2.55rem -2.55rem 4.75rem -2rem var(--shadow-light-blue),
-      2.55rem 2.55rem 4.75rem -0.5rem rgba(0, 0, 0, 0.5);
     width: 25.625rem;
     height: 25.625rem;
     margin: 6.8125rem auto 0;

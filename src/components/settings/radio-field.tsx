@@ -20,19 +20,30 @@ const StyledRadioField = styled.div<RadioFieldType>`
     border: 1px solid var(--light-gray);
     border-radius: 50%;
     content: '';
-    opacity: 0;
     position: absolute;
     height: 3.125rem;
     width: 3.125rem;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.18s ease-out;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: all 0.3s ease-out;
     z-index: -1;
   }
 
-  &:hover::before {
-    opacity: 1;
+  &:hover:not(.selected)::before {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  &.selected::after {
+    border-radius: 50%;
+    box-shadow: 0rem 0rem 0.5rem 0rem rgba(0, 0, 0, 0.15);
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2.5rem;
+    width: 2.5rem;
+    animation: ripple 0.5s cubic-bezier(0.11, 0.45, 0.72, 1) forwards;
   }
 
   .radio-field__input {
@@ -61,7 +72,7 @@ const StyledRadioField = styled.div<RadioFieldType>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: color 0.3s ease-out;
+    transition: color 0.5s ease-out;
   }
 
   .radio-field__checkmark {
@@ -115,7 +126,10 @@ const RadioField = ({
   };
 
   return (
-    <StyledRadioField isSelected={isSelected} className={`${className}`}>
+    <StyledRadioField
+      isSelected={isSelected}
+      className={`${className} ${isSelected && 'selected'}`}
+    >
       <input
         className='radio-field__input'
         id={id}

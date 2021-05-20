@@ -26,6 +26,14 @@ const StyledMain = styled.main`
 const StyledSettingsRow = styled.div`
   margin: 4.9375rem auto 3rem;
 
+  .open-settings-btn {
+    transition: transform 0.3s ease-out;
+
+    &:hover {
+      transform: rotate(90deg) scale(1.1);
+    }
+  }
+
   .open-settings-btn svg > path {
     transition: opacity 0.3s ease-out;
   }

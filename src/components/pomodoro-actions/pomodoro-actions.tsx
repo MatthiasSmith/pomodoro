@@ -15,8 +15,9 @@ const StyledPomodoroAction = styled.div<ActionProps>`
   height: 3.9375rem;
   margin: 0.8125rem auto 0;
   padding: 0.5rem 0.375rem;
-  width: 100%;
+  width: 20.4375rem;
   position: relative;
+  z-index: 1;
 
   .shifting-marker {
     border-radius: 1.65625rem;
@@ -30,14 +31,14 @@ const StyledPomodoroAction = styled.div<ActionProps>`
       props.actions.pomodoro
         ? 'translateX(0rem)'
         : props.actions.shortBreak
-        ? 'translateX(7.65rem)'
-        : 'translateX(15.3rem)'};
-    transition: transform 0.3s ease-out;
+        ? 'translateX(6.5rem)'
+        : 'translateX(13rem)'};
+    transition: transform 0.3s ease-in-out;
     z-index: 0;
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
-    max-width: 23.3125rem;
+    width: 23.3125rem;
 
     .shifting-marker {
       width: 7.5rem;

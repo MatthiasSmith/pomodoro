@@ -20,6 +20,8 @@ const GlobalStyles = createGlobalStyle`
     --focus-blue: #1e5ee6;
 
     --color-primary: var(--red-orange);
+    --timer-gradient: linear-gradient(to bottom right, #0e112a, #2e335c);
+    --timer-shadow: -3.125rem -3.125rem 6.25rem #262B5F, 3.125rem 3.125rem 6.25rem #121530;
   }
 
   * {
@@ -107,14 +109,37 @@ const GlobalStyles = createGlobalStyle`
     width: 1px;
   }
 
-  .focus-visible {
-    &:focus {
-      outline: 0;
+  .relative {
+    position: relative;
+  }
+
+  // animations
+  @keyframes fade-out {
+    from {
+      opacity: 1;
     }
-  
-    &:focus-visible {
-      outline: 5px auto Highlight;
-      outline: 5px auto -webkit-focus-ring-color;
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ripple {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(1.75);
+      opacity: 0;
     }
   }
 `;

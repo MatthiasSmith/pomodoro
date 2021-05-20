@@ -24,24 +24,6 @@ const StyledDialogBackdrop = styled.div`
   &.close {
     animation: fade-out 0.5s ease-out 0s forwards;
   }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fade-out {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
 `;
 
 const StyledDialog = styled.div`
@@ -138,10 +120,10 @@ const StyledDialog = styled.div`
   .font-settings-radio-container {
     input {
       background-color: var(--light-gray);
-      transition: background-color 0.3s ease-out;
+      transition: background-color 0.5s ease-out;
     }
 
-    .isSelected input {
+    .selected input {
       background-color: var(--darker-blue);
     }
   }
@@ -190,10 +172,11 @@ const StyledDialog = styled.div`
     margin: 0.5rem auto 0;
     position: relative;
     z-index: 1;
-    transition: background-color 0.3s ease-out;
+    transition: all 0.3s ease-out;
 
     &:hover {
       background-color: var(--light-red-orange);
+      transform: scale(1.05);
     }
 
     &:focus {
@@ -419,9 +402,7 @@ const SettingsDialog = ({
             <h3 className='settings-form-section__heading'>Font</h3>
             <div className='radio-group-container font-settings-radio-container flex-row align-center'>
               <RadioField
-                className={`sans-font ${
-                  settingsCopy.font === 'sans' ? 'isSelected' : ''
-                }`}
+                className='sans-font'
                 id='sans'
                 name='font'
                 value='sans'
@@ -431,9 +412,7 @@ const SettingsDialog = ({
                 ariaLabel={'sans font'}
               />
               <RadioField
-                className={`serif-font ${
-                  settingsCopy.font === 'serif' ? 'isSelected' : ''
-                }`}
+                className='serif-font'
                 id='serif'
                 name='font'
                 value='serif'
@@ -443,9 +422,7 @@ const SettingsDialog = ({
                 ariaLabel={'serif font'}
               />
               <RadioField
-                className={`mono-font ${
-                  settingsCopy.font === 'mono' ? 'isSelected' : ''
-                }`}
+                className='mono-font'
                 id='mono'
                 name='font'
                 value='mono'
