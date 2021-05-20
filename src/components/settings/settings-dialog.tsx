@@ -306,7 +306,7 @@ const SettingsDialog = ({
       isTiming &&
       currentTimerChanged &&
       !confirm(
-        'Changing time settings for your current timer will reset your progress. Would you like to continue anyways?'
+        'By changing time settings for your current timer, you will reset your countdown progress.\n\nWould you like to continue anyways?'
       )
     )
       return;

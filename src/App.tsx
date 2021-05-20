@@ -11,6 +11,7 @@ import Button from './components/button';
 import ActionsType from './types/actions';
 import { DESKTOP_BP, TABLET_BP } from './constants/breakpoints';
 import { SettingsContext } from './providers/settings-provider';
+import { SettingsType } from './types/settings';
 
 const StyledMain = styled.main`
   margin: 0 auto;
@@ -156,10 +157,15 @@ const App = () => {
   );
 
   const handleActionChange = (event: any) => {
+    const currentlyActive = Object.keys(actions).filter(
+      (key) => actions[key as keyof ActionsType]
+    );
     if (
-      isTiming &&
+      (isTiming ||
+        secondsLeft <
+          Number(settings[currentlyActive[0] as keyof SettingsType]) * 60) &&
       !confirm(
-        'Switching timers will lose your current progress. Would you like to continue anyways?'
+        'By switching timers you will interrupt your countdown progress.\n\nWould you like to continue anyways?'
       )
     )
       return;
