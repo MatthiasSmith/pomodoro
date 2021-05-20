@@ -147,6 +147,13 @@ const App = () => {
   );
 
   const handleActionChange = (event: any) => {
+    if (
+      isTiming &&
+      !confirm(
+        'Switching timers will lose your current progress. Would you like to continue anyways?'
+      )
+    )
+      return;
     clearInterval(timerInterval);
     setTimerInterval(null);
     setIsFinished(false);
@@ -246,7 +253,13 @@ const App = () => {
               </svg>
             </Button>
           </StyledSettingsRow>
-          {areSettingsOpen && <SettingsDialog onClose={handleCloseSettings} />}
+          {areSettingsOpen && (
+            <SettingsDialog
+              actions={actions}
+              isTiming={isTiming}
+              onClose={handleCloseSettings}
+            />
+          )}
         </StyledMain>
       </ThemeProvider>
     </>

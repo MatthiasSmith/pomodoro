@@ -7,6 +7,7 @@ import { TABLET_BP } from '../../constants/breakpoints';
 import Button from '../button';
 import TimeSettingsField from './time-settings-field';
 import RadioField from './radio-field';
+import ActionsType from '../../types/actions';
 
 const StyledDialogBackdrop = styled.div`
   animation: fade-in 0.5s ease-out 0s forwards;
@@ -269,7 +270,15 @@ const StyledDialog = styled.div`
   }
 `;
 
-const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
+const SettingsDialog = ({
+  isTiming,
+  actions,
+  onClose,
+}: {
+  isTiming: boolean;
+  actions: ActionsType;
+  onClose: () => void;
+}) => {
   const {
     settings,
     setSettings,
@@ -305,6 +314,19 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
 
   const handleSaveSettings = (event: any) => {
     event.preventDefault();
+    const currentTimerChanged = actions.pomodoro
+      ? settings.pomodoro !== settingsCopy.pomodoro
+      : actions.shortBreak
+      ? settings.shortBreak !== settingsCopy.shortBreak
+      : settings.longBreak !== settingsCopy.longBreak;
+    if (
+      isTiming &&
+      currentTimerChanged &&
+      !confirm(
+        'Changing time settings for your current timer will reset your progress. Would you like to continue anyways?'
+      )
+    )
+      return;
     setSettings({ ...settingsCopy });
     handleClose();
   };
