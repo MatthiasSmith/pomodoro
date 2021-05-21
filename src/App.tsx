@@ -106,26 +106,16 @@ const App = () => {
   useEffect(() => {
     setIsFinished(false);
 
+    const currentAction = getCurrentAction();
+    const newSeconds =
+      Number(settings[currentAction as keyof SettingsType]) * 60;
+
     // only reset time if current action timing has changed
     let hasTimingChanged = false;
-    if (actions.pomodoro) {
-      if (totalSeconds !== settings.pomodoro * 60) {
-        setTotalSeconds(settings.pomodoro * 60);
-        setSecondsLeft(settings.pomodoro * 60);
-        hasTimingChanged = true;
-      }
-    } else if (actions.shortBreak) {
-      if (totalSeconds !== settings.shortBreak * 60) {
-        setTotalSeconds(settings.shortBreak * 60);
-        setSecondsLeft(settings.shortBreak * 60);
-        hasTimingChanged = true;
-      }
-    } else {
-      if (totalSeconds !== settings.longBreak * 60) {
-        setTotalSeconds(settings.longBreak * 60);
-        setSecondsLeft(settings.longBreak * 60);
-        hasTimingChanged = true;
-      }
+    if (totalSeconds !== newSeconds) {
+      setTotalSeconds(newSeconds);
+      setSecondsLeft(newSeconds);
+      hasTimingChanged = true;
     }
 
     if (isTiming && hasTimingChanged) {
@@ -158,11 +148,15 @@ const App = () => {
     [areSettingsOpen]
   );
 
-  const getCurrentActionSeconds = () => {
-    const currentlyActive = Object.keys(actions).filter(
+  const getCurrentAction = () => {
+    return Object.keys(actions).filter(
       (key) => actions[key as keyof ActionsType]
-    );
-    return Number(settings[currentlyActive[0] as keyof SettingsType]) * 60;
+    )[0];
+  };
+
+  const getCurrentActionSeconds = () => {
+    const currentlyActive = getCurrentAction();
+    return Number(settings[currentlyActive as keyof SettingsType]) * 60;
   };
 
   const handleActionChange = (event: any) => {
