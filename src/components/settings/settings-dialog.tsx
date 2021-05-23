@@ -1,13 +1,17 @@
 import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { SettingsType } from '../../types/settings';
 import { SettingsContext } from '../../providers/settings-provider';
+import { SoundSettingsContext } from '../../providers/sound-settings-provider';
 import { TABLET_BP } from '../../constants/breakpoints';
 import Button from '../button';
 import TimeSettingsField from './time-settings-field';
 import RadioField from './radio-field';
 import ActionsType from '../../types/actions';
+
+const closeSFX = require('../../../public/sounds/close-settings.mp3');
 
 const StyledDialogBackdrop = styled.div`
   animation: fade-in 0.5s ease-out 0s forwards;
@@ -267,11 +271,18 @@ const SettingsDialog = ({
     setSettings,
   }: { settings: SettingsType; setSettings: (value: SettingsType) => void } =
     useContext(SettingsContext);
+  const {
+    soundSettings: { volume, soundEnabled },
+  } = useContext(SoundSettingsContext);
   const [settingsCopy, setSettingsCopy] = useState<SettingsType>({
     ...settings,
   });
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
+  const [playClose] = useSound(closeSFX, {
+    volume,
+    soundEnabled,
+  });
 
   const handleAnimationEnd = (event: any) => {
     event.stopPropagation();
@@ -285,11 +296,11 @@ const SettingsDialog = ({
   const handleClose = () => {
     backdropRef.current.classList.add('close');
     dialogRef.current.classList.add('close');
+    playClose();
   };
 
   const handleKeyUp = (event: any) => {
     event.stopPropagation();
-
     if (event.key === 'Escape') {
       handleClose();
     }

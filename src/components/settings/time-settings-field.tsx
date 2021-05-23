@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { TABLET_BP } from '../../constants/breakpoints';
+import { SoundSettingsContext } from '../../providers/sound-settings-provider';
 import Button from '../button';
+
+const clickSFX = require('../../../public/sounds/snap.mp3');
 
 const StyledTimerField = styled.div`
   display: flex;
@@ -122,9 +126,21 @@ const TimeSettingsField = ({
   value: number | string;
   onChange: Function;
 }) => {
+  const {
+    soundSettings: { soundEnabled },
+  } = useContext(SoundSettingsContext);
+  const [playClick] = useSound(clickSFX, {
+    playbackRate: 1.5,
+    volume: 0.5,
+    soundEnabled,
+  });
+
   const handleChange = (event: any) => {
-    const action =
-      event.type === 'click' ? event.currentTarget.dataset.label : 'typing';
+    let action = 'typing';
+    if (event.type === 'click') {
+      playClick();
+      action = 'click';
+    }
     const customEvent = { ...event, action, field: name };
     onChange(customEvent);
   };

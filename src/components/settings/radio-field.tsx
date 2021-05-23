@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import useSound from 'use-sound';
+
+import { SoundSettingsContext } from '../../providers/sound-settings-provider';
+
+const clickSFX = require('../../../public/sounds/sound-on.mp3');
 
 interface RadioFieldType {
   isSelected?: boolean;
@@ -122,7 +127,17 @@ const RadioField = ({
   className?: string;
   ariaLabel?: string;
 }) => {
+  const {
+    soundSettings: { volume, soundEnabled },
+  } = useContext(SoundSettingsContext);
+  const [playClick] = useSound(clickSFX, {
+    playbackRate: 1.5,
+    volume,
+    soundEnabled,
+  });
+
   const handleChange = (event: any) => {
+    playClick();
     onChange(event);
   };
 

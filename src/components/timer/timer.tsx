@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import useSound from 'use-sound';
 
 import { TABLET_BP, DESKTOP_BP } from '../../constants/breakpoints';
+import { SoundSettingsContext } from '../../providers/sound-settings-provider';
 import Button from '../button';
 import ProgressRing from './progress-ring';
+
+const startSFX = require('../../../public/sounds/start.mp3');
+const pauseSFX = require('../../../public/sounds/pause.mp3');
+
+const animationDelay = 300;
 
 const pseudoElementMixin = css`
   border-radius: 50%;
@@ -35,12 +42,12 @@ const StyledTimerButton = styled(Button)`
 
   &.active::before {
     ${pseudoElementMixin}
-    animation: ripple 1.5s cubic-bezier(.11,.45,.72,1) 0.3s forwards;
+    animation: ripple 1.5s cubic-bezier(.11,.45,.72,1) ${animationDelay}ms forwards;
   }
 
   &.active::after {
     ${pseudoElementMixin}
-    animation: ripple 2s cubic-bezier(.11,.45,.72,1) 0.3s forwards;
+    animation: ripple 2s cubic-bezier(.11,.45,.72,1) ${animationDelay}ms forwards;
   }
 
   &:hover {
@@ -242,6 +249,20 @@ const Timer = ({
   const [ariaMinutesLeft, setAriaMinutesLeft] = useState(minutes);
   const [ariaSecondsLeft, setAriaSecondsLeft] = useState(seconds);
   const [radius, setRadius] = useState(137.51);
+  const {
+    soundSettings: { volume, soundEnabled },
+  } = useContext(SoundSettingsContext);
+  const [playStart] = useSound(startSFX, {
+    playbackRate: 0.92,
+    soundEnabled,
+    volume,
+    interrupt: true,
+  });
+  const [playPause] = useSound(pauseSFX, {
+    playbackRate: 1.85,
+    volume: 0.25,
+    soundEnabled,
+  });
 
   useEffect(() => {
     const isSmScreen = document.documentElement.clientWidth < TABLET_BP * 16;
@@ -257,11 +278,13 @@ const Timer = ({
 
   const handleClick = () => {
     if (!isTiming || isFinished) {
+      setTimeout(playStart, animationDelay);
       onStart();
     } else {
       const mins = Math.floor(secondsLeft / 60);
       setAriaMinutesLeft(mins);
       setAriaSecondsLeft(secondsLeft - mins * 60);
+      playPause();
       onPause();
     }
   };

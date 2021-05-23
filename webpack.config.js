@@ -46,7 +46,7 @@ module.exports = (env) => {
           },
         },
         {
-          test: /\.(png|jpg|svg)$/i,
+          test: /\.(png|jpg|svg|mp3)$/i,
           type: 'asset/resource',
         },
       ],

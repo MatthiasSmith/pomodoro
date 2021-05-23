@@ -1,9 +1,14 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import ActionChoice from './action-choice';
 import ActionsType from '../../types/actions';
 import { TABLET_BP } from '../../constants/breakpoints';
+import { SoundSettingsContext } from '../../providers/sound-settings-provider';
+
+const clickSFX = require('../../../public/sounds/snap.mp3');
+const transitionDuration = 300;
 
 interface ActionProps {
   actions: ActionsType;
@@ -33,7 +38,8 @@ const StyledPomodoroAction = styled.div<ActionProps>`
         : props.actions.shortBreak
         ? 'translateX(6.5rem)'
         : 'translateX(13rem)'};
-    transition: transform 0.3s ease-in-out;
+    transition: transform ${transitionDuration}ms
+      cubic-bezier(0.4, 0.12, 0.95, 0.66);
     z-index: 0;
   }
 
@@ -57,8 +63,21 @@ const PomodoroActions = ({
   onChange,
 }: {
   actions: any;
-  onChange: Function;
+  onChange: (event: any) => void;
 }) => {
+  const {
+    soundSettings: { volume, soundEnabled },
+  } = useContext(SoundSettingsContext);
+  const [playClick] = useSound(clickSFX, {
+    volume,
+    soundEnabled,
+  });
+
+  const handleChange = (event: any) => {
+    setTimeout(playClick, transitionDuration - 75);
+    onChange(event);
+  };
+
   return (
     <StyledPomodoroAction actions={actions} className='flex-row space-between'>
       <ActionChoice
@@ -66,23 +85,23 @@ const PomodoroActions = ({
         name='action'
         value='pomodoro'
         isSelected={actions.pomodoro}
-        onChange={onChange}
+        onChange={handleChange}
       />
       <ActionChoice
         id='shortBreak'
         name='action'
         value='short break'
         isSelected={actions.shortBreak}
-        onChange={onChange}
+        onChange={handleChange}
       />
       <ActionChoice
         id='longBreak'
         name='action'
         value='long break'
         isSelected={actions.longBreak}
-        onChange={onChange}
+        onChange={handleChange}
       />
-      <div className='shifting-marker'></div>
+      <div id='shifting-marker' className='shifting-marker'></div>
     </StyledPomodoroAction>
   );
 };
