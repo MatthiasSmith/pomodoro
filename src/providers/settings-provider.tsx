@@ -9,11 +9,11 @@ interface SettingsContextType {
 
 export const SettingsContext = createContext<SettingsContextType>({
   settings: {
-    pomodoro: 25,
-    shortBreak: 5,
-    longBreak: 15,
-    font: 'sans',
-    color: 'red-orange',
+    pomodoro: null,
+    shortBreak: null,
+    longBreak: null,
+    font: null,
+    color: null,
   },
   setSettings: () => {},
 });
