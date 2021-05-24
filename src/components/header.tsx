@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { TABLET_BP, DESKTOP_BP } from '../constants/breakpoints';
 
-const LogoSvg = require('../../public/assets/logo.svg');
+const LogoSvg = require('../../public/images/logo.svg');
 
 const StyledHeader = styled.header`
   text-align: center;

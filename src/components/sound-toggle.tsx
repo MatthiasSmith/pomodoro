@@ -6,8 +6,8 @@ import Button from './button';
 import { SoundSettingsContext } from '../providers/sound-settings-provider';
 import { DESKTOP_BP, TABLET_BP } from '../constants/breakpoints';
 
-const volumeOn = require('../../public/assets/volume-on.svg');
-const volumeOff = require('../../public/assets/volume-off.svg');
+const volumeOn = require('../../public/images/volume-on.svg');
+const volumeOff = require('../../public/images/volume-off.svg');
 const soundOnSFX = require('../../public/sounds/sound-on.mp3');
 const soundOffSFX = require('../../public/sounds/sound-off.mp3');
 

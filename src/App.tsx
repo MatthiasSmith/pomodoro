@@ -14,7 +14,7 @@ import { SettingsContext } from './providers/settings-provider';
 import { SoundSettingsContext } from './providers/sound-settings-provider';
 import { SettingsType } from './types/settings';
 import SoundToggle from './components/sound-toggle';
-import SettingsButton from './components/settings-button';
+import SettingsButton from './components/settings/settings-button';
 
 const finishSFX = require('../public/sounds/timer-finish.mp3');
 

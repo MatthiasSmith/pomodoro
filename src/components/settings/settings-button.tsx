@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { SoundSettingsContext } from '../providers/sound-settings-provider';
-import Button from './button';
+import { SoundSettingsContext } from '../../providers/sound-settings-provider';
+import Button from '../button';
 
 interface ButtonType extends React.ComponentPropsWithRef<'button'> {}
 
-const openSFX = require('../../public/sounds/open-settings.mp3');
+const openSFX = require('../../../public/sounds/open-settings.mp3');
 
 const StyledSettingsButton = styled(Button)`
   transition: transform 0.3s ease-out;

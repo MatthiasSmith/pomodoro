@@ -25,7 +25,7 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         title: 'Pomodoro App | Frontend Mentor',
         template: './src/index.html',
-        favicon: './public/assets/favicon-32x32.png',
+        favicon: './public/images/favicon-32x32.png',
       }),
     ],
     module: {
