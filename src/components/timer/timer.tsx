@@ -9,7 +9,6 @@ import ProgressRing from './progress-ring';
 
 const startSFX = require('../../../public/sounds/start.mp3');
 const pauseSFX = require('../../../public/sounds/pause.mp3');
-
 const animationDelay = 300;
 
 const pseudoElementMixin = css`
@@ -37,17 +36,84 @@ const StyledTimerButton = styled(Button)`
   position: relative;
 
   &.active {
-    animation: shrink 0.2s ease-in-out 0s 2 alternate;
+    animation: start-shrink 0.2s ease-in-out 0s 2 alternate;
+
+    &::before {
+      ${pseudoElementMixin}
+      animation: ripple 1.5s cubic-bezier(.11,.45,.72,1) ${animationDelay}ms;
+    }
+
+    &::after {
+      ${pseudoElementMixin}
+      animation: ripple 2s cubic-bezier(.11,.45,.72,1) ${animationDelay}ms;
+    }
   }
 
-  &.active::before {
-    ${pseudoElementMixin}
-    animation: ripple 1.5s cubic-bezier(.11,.45,.72,1) ${animationDelay}ms forwards;
+  &.paused {
+    animation: pause-shrink 0.08s ease-in-out 0s 2 alternate;
   }
 
-  &.active::after {
-    ${pseudoElementMixin}
-    animation: ripple 2s cubic-bezier(.11,.45,.72,1) ${animationDelay}ms forwards;
+  &.finished {
+    animation: finish-shake 0.15s ease-in-out 0s;
+
+    &::before {
+      ${pseudoElementMixin}
+      animation: finish-ripple 0.75s cubic-bezier(0.11, 0.45, 0.72, 1) 0ms;
+    }
+
+    &::after {
+      ${pseudoElementMixin}
+      animation: finish-ripple 1.5s cubic-bezier(0.11, 0.45, 0.72, 1) 0ms;
+    }
+  }
+
+  @keyframes start-shrink {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes pause-shrink {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0.97);
+    }
+  }
+
+  @keyframes finish-shake {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+
+  @keyframes finish-ripple {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+  }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    &.active::before,
+    &.active::after {
+      display: none;
+    }
   }
 
   &:hover {
@@ -66,22 +132,6 @@ const StyledTimerButton = styled(Button)`
     border-radius: 0.125rem;
     box-shadow: 0rem 0rem 0rem 0.185rem var(--darker-blue),
       0rem 0rem 0rem 0.285rem rgba(255, 255, 255, 0.38);
-  }
-
-  @media screen and (prefers-reduced-motion: reduce) {
-    &.active::before,
-    &.active::after {
-      display: none;
-    }
-  }
-
-  @keyframes shrink {
-    from {
-      transform: scale(1);
-    }
-    to {
-      transform: scale(0.96);
-    }
   }
 
   .timer__circle-container {
@@ -292,7 +342,9 @@ const Timer = ({
   return (
     <StyledTimerButton
       onClick={handleClick}
-      className={`timer flex-col-centered ${isTiming ? 'active' : ''}`}
+      className={`flex-col-centered ${
+        isFinished ? 'finished' : isTiming ? 'active' : 'paused'
+      }`}
       aria-label={`${
         isFinished ? 'restart' : isTiming ? 'pause' : 'start'
       } the timer`}
@@ -302,12 +354,22 @@ const Timer = ({
           <StyledProgressRing radius={radius} stroke={9} progress={progress} />
           <div className='timer__content-container flex-col justify-center'>
             {isFinished ? (
-              <span className='sr-only' role='alert' aria-live='assertive'>
+              <span
+                className='sr-only'
+                role='alert'
+                aria-live='assertive'
+                aria-atomic={true}
+              >
                 Your {actionType} timer has finished. Would you like to restart
                 it?
               </span>
             ) : isTiming ? (
-              <span className='sr-only' role='alert' aria-live='assertive'>
+              <span
+                className='sr-only'
+                role='alert'
+                aria-live='assertive'
+                aria-atomic={true}
+              >
                 {actionType} timer started. Counting down from{' '}
                 {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes'}
                 {ariaSecondsLeft > 0 && ' ' + ariaSecondsLeft + ' seconds'}
@@ -327,7 +389,7 @@ const Timer = ({
             <h2
               className='sr-only'
               role='timer'
-              aria-atomic='true'
+              aria-atomic={true}
               aria-live='assertive'
             >
               {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes '}
