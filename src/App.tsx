@@ -86,6 +86,7 @@ const App = () => {
       setTimerInterval(null);
       setIsFinished(true);
       setIsTiming(false);
+      setPausedSeconds(0);
       playFinishedSound();
     }
   }, [secondsLeft]);
@@ -103,6 +104,7 @@ const App = () => {
     if (totalSeconds !== newSeconds) {
       setTotalSeconds(newSeconds);
       setSecondsLeft(newSeconds);
+      // setPausedSeconds(0);
       hasTimingChanged = true;
     }
 
@@ -110,6 +112,7 @@ const App = () => {
       clearInterval(timerInterval);
       setTimerInterval(null);
       setLastProgressUpdate(0);
+      setPausedSeconds(0);
       setIsTiming(false);
       setStartTime(null);
     }
@@ -166,6 +169,7 @@ const App = () => {
     setTotalSeconds(newSeconds);
     setSecondsLeft(newSeconds);
     setLastProgressUpdate(newSeconds);
+    setPausedSeconds(0);
   };
 
   const handleStart = () => {
