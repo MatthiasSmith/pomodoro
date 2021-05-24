@@ -104,7 +104,7 @@ const App = () => {
     if (totalSeconds !== newSeconds) {
       setTotalSeconds(newSeconds);
       setSecondsLeft(newSeconds);
-      // setPausedSeconds(0);
+      setPausedSeconds(0);
       hasTimingChanged = true;
     }
 
