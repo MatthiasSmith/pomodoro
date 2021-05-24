@@ -21,6 +21,7 @@ const finishSFX = require('../public/sounds/timer-finish.mp3');
 const StyledMain = styled.main`
   margin: 0 auto;
   max-width: 25.625rem;
+  overflow: hidden;
   padding: 0 1.5rem;
   width: 100%;
 
