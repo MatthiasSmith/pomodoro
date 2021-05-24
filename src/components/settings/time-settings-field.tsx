@@ -8,7 +8,7 @@ import Button from '../button';
 
 const clickSFX = require('../../../public/sounds/snap.mp3');
 
-const StyledTimerField = styled.div`
+const StyledTimeSettingsField = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -146,7 +146,7 @@ const TimeSettingsField = ({
   };
 
   return (
-    <StyledTimerField>
+    <StyledTimeSettingsField>
       <label className='field-label' htmlFor={id}>
         {label}
       </label>
@@ -204,7 +204,7 @@ const TimeSettingsField = ({
           </svg>
         </Button>
       </div>
-    </StyledTimerField>
+    </StyledTimeSettingsField>
   );
 };
 

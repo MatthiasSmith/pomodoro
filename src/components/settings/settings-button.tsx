@@ -52,7 +52,6 @@ const SettingsButton = React.forwardRef<Ref, ButtonType>((props, ref) => {
       title='settings'
       onClick={handleClick}
       aria-label='Open settings dialog'
-      className='open-settings-btn'
       ref={ref}
     >
       <svg
