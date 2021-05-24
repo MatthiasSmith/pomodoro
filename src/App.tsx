@@ -50,6 +50,7 @@ const App = () => {
   const [timerInterval, setTimerInterval] = useState(null);
   const [totalSeconds, setTotalSeconds] = useState(settings.pomodoro * 60);
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
+  const [pausedSeconds, setPausedSeconds] = useState(0);
   const [startTime, setStartTime] = useState(null);
   const [lastProgressUpdate, setLastProgressUpdate] = useState(0);
   const [timerProgress, setTimerProgress] = useState(100);
@@ -147,13 +148,6 @@ const App = () => {
   };
 
   const handleActionChange = (event: any) => {
-    if (
-      (isTiming || secondsLeft < getCurrentActionSeconds()) &&
-      !confirm(
-        'By switching timers you will interrupt your countdown progress.\n\nWould you like to continue anyways?'
-      )
-    )
-      return;
     clearInterval(timerInterval);
     setTimerInterval(null);
     setIsFinished(false);
@@ -167,19 +161,11 @@ const App = () => {
     );
     setActions({ ...updatedActions });
 
-    if (event.target.id === 'shortBreak') {
-      setTotalSeconds(settings.shortBreak * 60);
-      setSecondsLeft(settings.shortBreak * 60);
-      setLastProgressUpdate(settings.shortBreak * 60);
-    } else if (event.target.id === 'longBreak') {
-      setTotalSeconds(settings.longBreak * 60);
-      setSecondsLeft(settings.longBreak * 60);
-      setLastProgressUpdate(settings.longBreak * 60);
-    } else {
-      setTotalSeconds(settings.pomodoro * 60);
-      setSecondsLeft(settings.pomodoro * 60);
-      setLastProgressUpdate(settings.pomodoro * 60);
-    }
+    const newSeconds =
+      Number(settings[event.target.id as keyof SettingsType]) * 60;
+    setTotalSeconds(newSeconds);
+    setSecondsLeft(newSeconds);
+    setLastProgressUpdate(newSeconds);
   };
 
   const handleStart = () => {
@@ -193,7 +179,7 @@ const App = () => {
     clearInterval(timerInterval);
     setTimerInterval(null);
     setIsTiming(false);
-    setTotalSeconds(secondsLeft);
+    setPausedSeconds(secondsLeft);
   };
 
   const handleOpenSettings = () => {
@@ -206,7 +192,7 @@ const App = () => {
 
   const updateTime = () => {
     const diff = Math.floor((Date.now() - startTime) / 1000);
-    setSecondsLeft(totalSeconds - diff);
+    setSecondsLeft((pausedSeconds || totalSeconds) - diff);
   };
 
   return (
