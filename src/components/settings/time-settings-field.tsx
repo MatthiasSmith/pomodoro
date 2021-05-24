@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
@@ -52,6 +52,10 @@ const StyledTimeSettingsField = styled.div`
     &:focus {
       outline: none;
       box-shadow: 0rem 0rem 0rem 0.125rem var(--focus-blue);
+    }
+
+    &:invalid {
+      border: 2px dashed red;
     }
   }
 
@@ -126,6 +130,7 @@ const TimeSettingsField = ({
   value: number | string;
   onChange: Function;
 }) => {
+  const inputRef = useRef(null);
   const {
     soundSettings: { soundEnabled },
   } = useContext(SoundSettingsContext);
@@ -136,10 +141,13 @@ const TimeSettingsField = ({
   });
 
   const handleChange = (event: any) => {
-    let action = 'typing';
+    const action =
+      event.type === 'click' ? event.currentTarget.dataset.label : 'typing';
     if (event.type === 'click') {
+      const newVal =
+        Number(inputRef.current.value) + (action === 'increase' ? 1 : -1);
+      if (newVal < 1 || newVal > 60) return;
       playClick();
-      action = 'click';
     }
     const customEvent = { ...event, action, field: name };
     onChange(customEvent);
@@ -158,8 +166,9 @@ const TimeSettingsField = ({
           name={id}
           value={value}
           onChange={handleChange}
-          min={1}
-          max={60}
+          min='1'
+          max='60'
+          ref={inputRef}
         />
         <Button
           className='arrow-btn arrow-btn__up'
