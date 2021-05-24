@@ -60,11 +60,6 @@ const GlobalStyles = createGlobalStyle`
     overflow: hidden;
   }
 
-  .fill-container {
-    height: 100%;
-    width: 100%;
-  }
-
   // layout
   .flex-row {
     display: flex;
@@ -94,10 +89,6 @@ const GlobalStyles = createGlobalStyle`
     align-items: center;
   }
 
-  .flex-1 {
-    flex: 1;
-  }
-
   // utility
   .sr-only:not(:focus):not(:active) {
     clip: rect(0 0 0 0); 
@@ -107,10 +98,6 @@ const GlobalStyles = createGlobalStyle`
     position: absolute;
     white-space: nowrap; 
     width: 1px;
-  }
-
-  .relative {
-    position: relative;
   }
 
   // animations
