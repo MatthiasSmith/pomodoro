@@ -8,6 +8,7 @@ const StyledButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 `;
 
 const Button = React.forwardRef<Ref, ButtonType>((props, ref) => {

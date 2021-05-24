@@ -15,6 +15,7 @@ const StyledRadioField = styled.div<RadioFieldType>`
   height: 2.5rem;
   width: 2.5rem;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 
   &:not(:first-of-type) {
     margin-left: 1rem;

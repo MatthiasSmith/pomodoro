@@ -10,6 +10,7 @@ interface ActionChoiceProps {
 const StyledActionChoice = styled.div<ActionChoiceProps>`
   position: relative;
   z-index: 1;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover .action-choice__label {
     opacity: 1;
