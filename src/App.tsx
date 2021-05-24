@@ -9,18 +9,17 @@ import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
 import Timer from './components/timer/timer';
 import SettingsDialog from './components/settings/settings-dialog';
 import ActionsType from './types/actions';
+import SoundToggle from './components/sound-toggle';
+import SettingsButton from './components/settings/settings-button';
 import { DESKTOP_BP, TABLET_BP } from './constants/breakpoints';
 import { SettingsContext } from './providers/settings-provider';
 import { SoundSettingsContext } from './providers/sound-settings-provider';
 import { SettingsType } from './types/settings';
-import SoundToggle from './components/sound-toggle';
-import SettingsButton from './components/settings/settings-button';
 
 const finishSFX = require('../public/sounds/timer-finish.mp3');
 
 const StyledMain = styled.main`
   margin: 0 auto;
-  max-width: 25.625rem;
   overflow: hidden;
   padding: 0 1.5rem;
   width: 100%;
@@ -234,17 +233,17 @@ const App = () => {
             isTiming={isTiming}
             isFinished={isFinished}
           />
-          <StyledSettingsRow className='settings-btn-row flex-row justify-center'>
+          <StyledSettingsRow className='flex-row justify-center'>
             <SettingsButton onClick={handleOpenSettings} ref={settingsBtnRef} />
           </StyledSettingsRow>
-          {areSettingsOpen && (
-            <SettingsDialog
-              actions={actions}
-              isTiming={isTiming}
-              onClose={handleCloseSettings}
-            />
-          )}
         </StyledMain>
+        {areSettingsOpen && (
+          <SettingsDialog
+            actions={actions}
+            isTiming={isTiming}
+            onClose={handleCloseSettings}
+          />
+        )}
       </ThemeProvider>
     </>
   );
