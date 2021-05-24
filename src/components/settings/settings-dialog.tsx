@@ -37,7 +37,7 @@ const StyledDialog = styled.div`
   color: var(--darker-blue);
   height: 100%;
   width: 88%;
-  max-height: 35.0625rem;
+  max-height: 35.3125rem;
   max-width: 33.75rem;
   position: fixed;
   top: 2.875rem;
@@ -173,7 +173,7 @@ const StyledDialog = styled.div`
     font-size: 1rem;
     height: 3.3125rem;
     width: 8.75rem;
-    margin: 0.5rem auto 0;
+    margin: 0.25rem auto 0;
     position: relative;
     z-index: 1;
     transition: all 0.3s ease-out;
@@ -195,7 +195,7 @@ const StyledDialog = styled.div`
 
   @media screen and (min-width: ${TABLET_BP}em) {
     border-radius: 1.5625rem;
-    max-height: 29rem;
+    max-height: 28.965rem;
     top: 50%;
     transform: translate(-50%, 100%);
 
@@ -308,19 +308,7 @@ const SettingsDialog = ({
 
   const handleSaveSettings = (event: any) => {
     event.preventDefault();
-    const currentTimerChanged = actions.pomodoro
-      ? settings.pomodoro !== settingsCopy.pomodoro
-      : actions.shortBreak
-      ? settings.shortBreak !== settingsCopy.shortBreak
-      : settings.longBreak !== settingsCopy.longBreak;
-    if (
-      isTiming &&
-      currentTimerChanged &&
-      !confirm(
-        'By changing time settings for your current timer, you will reset your countdown progress.\n\nWould you like to continue anyways?'
-      )
-    )
-      return;
+
     setSettings({ ...settingsCopy });
     handleClose();
   };

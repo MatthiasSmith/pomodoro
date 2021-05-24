@@ -71,11 +71,11 @@ const StyledTimeSettingsField = styled.div`
     }
 
     &__up {
-      top: 0.45rem;
+      top: 0.4rem;
     }
 
     &__down {
-      bottom: 0.45rem;
+      bottom: 0.4rem;
     }
 
     svg > path {
