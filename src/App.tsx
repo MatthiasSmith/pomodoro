@@ -227,13 +227,7 @@ const App = () => {
             <SettingsButton onClick={handleOpenSettings} ref={settingsBtnRef} />
           </StyledSettingsRow>
         </StyledMain>
-        {areSettingsOpen && (
-          <SettingsDialog
-            actions={actions}
-            isTiming={isTiming}
-            onClose={handleCloseSettings}
-          />
-        )}
+        {areSettingsOpen && <SettingsDialog onClose={handleCloseSettings} />}
       </ThemeProvider>
     </>
   );

@@ -9,7 +9,6 @@ import { TABLET_BP } from '../../constants/breakpoints';
 import Button from '../button';
 import TimeSettingsField from './time-settings-field';
 import RadioField from './radio-field';
-import ActionsType from '../../types/actions';
 
 const closeSFX = require('../../../public/sounds/close-settings.mp3');
 
@@ -257,15 +256,7 @@ const StyledDialog = styled.div`
   }
 `;
 
-const SettingsDialog = ({
-  isTiming,
-  actions,
-  onClose,
-}: {
-  isTiming: boolean;
-  actions: ActionsType;
-  onClose: () => void;
-}) => {
+const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
   const {
     settings,
     setSettings,
@@ -308,7 +299,6 @@ const SettingsDialog = ({
 
   const handleSaveSettings = (event: any) => {
     event.preventDefault();
-
     setSettings({ ...settingsCopy });
     handleClose();
   };
