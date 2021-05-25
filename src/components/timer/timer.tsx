@@ -319,7 +319,6 @@ const Timer = ({
   actionType,
   secondsLeft,
   progress,
-  lastProgressUpdate,
   onStart,
   onPause,
   isTiming,
@@ -328,7 +327,6 @@ const Timer = ({
   actionType: string;
   secondsLeft: number;
   progress: number;
-  lastProgressUpdate: number;
   onStart: Function;
   onPause: Function;
   isTiming: boolean;
@@ -358,12 +356,22 @@ const Timer = ({
     setRadius(isSmScreen ? 137.51 : 180.5);
   }, []);
 
-  // update the aria timer so it will announce the change
+  // update the aria timer when seconds hit the minute mark
   useEffect(() => {
+    if (minutes <= 0 && seconds <= 0) return;
+    if (seconds === 0) {
+      updateAriaTime();
+    }
+  }, [secondsLeft]);
+
+  // update the aria timer when action types change
+  useEffect(() => updateAriaTime(), [actionType]);
+
+  const updateAriaTime = () => {
     const mins = Math.floor(secondsLeft / 60);
     setAriaMinutesLeft(mins);
     setAriaSecondsLeft(secondsLeft - mins * 60);
-  }, [lastProgressUpdate, actionType]);
+  };
 
   const handleClick = () => {
     if (!isTiming || isFinished) {
@@ -373,9 +381,7 @@ const Timer = ({
       isReducedMotion ? playStart() : setTimeout(playStart, animationDelay);
       onStart();
     } else {
-      const mins = Math.floor(secondsLeft / 60);
-      setAriaMinutesLeft(mins);
-      setAriaSecondsLeft(secondsLeft - mins * 60);
+      updateAriaTime();
       playPause();
       onPause();
     }
@@ -395,55 +401,38 @@ const Timer = ({
         <div className='timer__progress-circle flex-col-centered circle'>
           <StyledProgressRing radius={radius} stroke={9} progress={progress} />
           <div className='timer__content-container flex-col justify-center'>
-            {isFinished ? (
-              <span
-                className='sr-only'
-                role='alert'
-                aria-live='assertive'
-                aria-atomic={true}
-              >
-                Your {actionType} timer has finished. Would you like to restart
-                it?
-              </span>
-            ) : isTiming ? (
-              <span
-                className='sr-only'
-                role='alert'
-                aria-live='assertive'
-                aria-atomic={true}
-              >
-                {actionType} timer started. Counting down from{' '}
-                {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes'}
-                {ariaSecondsLeft > 0 && ' ' + ariaSecondsLeft + ' seconds'}
-              </span>
-            ) : (
-              <span
-                className='sr-only'
-                role='alert'
-                aria-live='assertive'
-                aria-atomic={true}
-              >
-                {actionType} timer paused at
-                {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes '}
-                {ariaSecondsLeft > 0 && ariaSecondsLeft + ' seconds'}
-              </span>
-            )}
-            <h2
+            <div
               className='sr-only'
               role='timer'
-              aria-atomic={true}
               aria-live='assertive'
+              aria-atomic='true'
             >
-              {ariaMinutesLeft > 0 && ariaMinutesLeft + ' minutes '}
-              {ariaSecondsLeft > 0 && ariaSecondsLeft + ' seconds'} remain
-            </h2>
+              {`${
+                isFinished
+                  ? 'Your ' +
+                    actionType +
+                    ' timer has finished. Would you like to restart it?'
+                  : isTiming
+                  ? actionType + ' timer active.'
+                  : actionType + ' timer paused.'
+              }`}
+              {!isFinished && (
+                <h2>
+                  {`${
+                    ariaMinutesLeft > 0 ? ariaMinutesLeft + ' minutes ' : ' '
+                  }${
+                    ariaSecondsLeft > 0 ? ariaSecondsLeft + ' seconds ' : ''
+                  }remain`}
+                </h2>
+              )}
+            </div>
             <h2 className='timer__time-label' aria-hidden={true}>
               {minutes < 10 ? `0${minutes}` : minutes}:
               {seconds < 10 ? `0${seconds}` : seconds}
             </h2>
-            <h3 className='timer__action-label'>
+            <span className='timer__action-label'>
               {isFinished ? 'restart' : isTiming ? 'pause' : 'start'}
-            </h3>
+            </span>
           </div>
         </div>
       </div>

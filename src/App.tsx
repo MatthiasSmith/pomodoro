@@ -54,7 +54,6 @@ const App = () => {
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [pausedSeconds, setPausedSeconds] = useState(0);
   const [startTime, setStartTime] = useState(null);
-  const [lastProgressUpdate, setLastProgressUpdate] = useState(0);
   const [timerProgress, setTimerProgress] = useState(100);
   const [isTiming, setIsTiming] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -70,17 +69,12 @@ const App = () => {
   // start the countdown
   useEffect(() => {
     if (startTime === null) return;
-    setLastProgressUpdate(startTime);
     setTimerInterval(setInterval(updateTime, 20));
   }, [startTime]);
 
   // update timer progress
   useEffect(() => {
     setTimerProgress((secondsLeft / getCurrentActionSeconds()) * 100);
-
-    if (Math.floor((Date.now() - lastProgressUpdate) / 1000) >= 60) {
-      setLastProgressUpdate(Date.now());
-    }
 
     // timer finished
     if (secondsLeft <= 0) {
@@ -113,7 +107,6 @@ const App = () => {
     if (isTiming && hasTimingChanged) {
       clearInterval(timerInterval);
       setTimerInterval(null);
-      setLastProgressUpdate(0);
       setPausedSeconds(0);
       setIsTiming(false);
       setStartTime(null);
@@ -170,7 +163,6 @@ const App = () => {
       Number(settings[event.target.id as keyof SettingsType]) * 60;
     setTotalSeconds(newSeconds);
     setSecondsLeft(newSeconds);
-    setLastProgressUpdate(newSeconds);
     setPausedSeconds(0);
   };
 
@@ -210,20 +202,13 @@ const App = () => {
           <SoundToggle />
           <PomodoroActions actions={actions} onChange={handleActionChange} />
           <Timer
-            actionType={
-              actions.pomodoro
-                ? 'pomodoro'
-                : actions.shortBreak
-                ? 'short break'
-                : 'long break'
-            }
+            actionType={getCurrentAction()}
             secondsLeft={secondsLeft}
             progress={timerProgress}
-            lastProgressUpdate={lastProgressUpdate}
-            onStart={handleStart}
-            onPause={handlePause}
             isTiming={isTiming}
             isFinished={isFinished}
+            onStart={handleStart}
+            onPause={handlePause}
           />
           <StyledSettingsRow className='flex-row justify-center'>
             <SettingsButton onClick={handleOpenSettings} ref={settingsBtnRef} />

@@ -14,8 +14,9 @@ interface ActionProps {
   actions: ActionsType;
 }
 
-const StyledPomodoroAction = styled.div<ActionProps>`
+const StyledPomodoroAction = styled.fieldset<ActionProps>`
   background-color: var(--darker-blue);
+  border: none;
   border-radius: 1.96875rem;
   height: 3.9375rem;
   margin: 0.8125rem auto 0;

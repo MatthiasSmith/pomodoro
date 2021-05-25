@@ -124,6 +124,7 @@ const StyledDialog = styled.div`
   }
 
   .radio-group-container {
+    border: none;
     justify-content: center;
     margin-top: 1.125rem;
   }
@@ -428,7 +429,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
           </section>
           <section className='settings-form-section settings-form-section__font'>
             <h3 className='settings-form-section__heading'>Font</h3>
-            <div className='radio-group-container font-settings-radio-container flex-row align-center'>
+            <fieldset className='radio-group-container font-settings-radio-container flex-row align-center'>
               <RadioField
                 className='sans-font'
                 id='sans'
@@ -459,11 +460,11 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 onChange={handleFontChange}
                 ariaLabel={'mono font'}
               />
-            </div>
+            </fieldset>
           </section>
           <section className='settings-form-section settings-form-section__color'>
             <h3 className='settings-form-section__heading'>Color</h3>
-            <div className='radio-group-container color-settings-radio-container flex-row'>
+            <fieldset className='radio-group-container color-settings-radio-container flex-row'>
               <RadioField
                 className='red-orange'
                 id='red-orange'
@@ -491,7 +492,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
                 onChange={handleColorChange}
                 ariaLabel='violet color'
               />
-            </div>
+            </fieldset>
           </section>
           <Button
             className='apply-btn'

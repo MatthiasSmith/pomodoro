@@ -49,7 +49,7 @@ const SettingsButton = React.forwardRef<Ref, ButtonType>((props, ref) => {
 
   return (
     <StyledSettingsButton
-      title='settings'
+      title='Open settings'
       onClick={handleClick}
       aria-label='Open settings dialog'
       ref={ref}

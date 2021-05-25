@@ -68,16 +68,17 @@ const SoundToggle = () => {
         role='switch'
         aria-checked={soundSettings.soundEnabled}
         onClick={handleClick}
+        title={soundSettings.soundEnabled ? 'Turn sound off' : 'Turn sound on'}
       >
         {soundSettings.soundEnabled ? (
           <img className='icon' src={volumeOn} alt='' />
         ) : (
           <img className='icon' src={volumeOff} alt='' />
         )}
+        <label htmlFor='sound-toggle' className='sr-only'>
+          Toggle sound
+        </label>
       </StyledSoundToggle>
-      <label htmlFor='sound-toggle' className='sr-only'>
-        {soundSettings.soundEnabled ? 'Turn sound off' : 'Turn sound on'}
-      </label>
     </>
   );
 };
