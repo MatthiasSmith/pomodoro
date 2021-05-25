@@ -107,6 +107,28 @@ const StyledRadioField = styled.div<RadioFieldType>`
       }
     }
   }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    &::before {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1);
+      transition-property: opacity;
+    }
+
+    &:hover:not(.selected)::before {
+      opacity: 1;
+    }
+
+    &.selected::after {
+      display: none;
+    }
+
+    .radio-field__checkmark {
+      animation-name: fade-in;
+      transform: scale(1) rotate(-45deg) translate(-50%, -50%);
+      transform-origin: 50% 50%;
+    }
+  }
 `;
 
 const RadioField = ({

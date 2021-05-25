@@ -56,6 +56,12 @@ const StyledPomodoroAction = styled.div<ActionProps>`
           : 'translateX(15rem)'};
     }
   }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    .shifting-marker {
+      transition-duration: 0s;
+    }
+  }
 `;
 
 const PomodoroActions = ({
@@ -74,7 +80,12 @@ const PomodoroActions = ({
   });
 
   const handleChange = (event: any) => {
-    setTimeout(playClick, transitionDuration - 75);
+    const isReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    isReducedMotion
+      ? playClick()
+      : setTimeout(playClick, transitionDuration - 75);
     onChange(event);
   };
 

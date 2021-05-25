@@ -27,6 +27,14 @@ const StyledDialogBackdrop = styled.div`
   &.close {
     animation: fade-out 0.5s ease-out 0s forwards;
   }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    animation-duration: 0.3s;
+
+    &.close {
+      animation-duration: 0.3s;
+    }
+  }
 `;
 
 const StyledDialog = styled.div`
@@ -192,11 +200,28 @@ const StyledDialog = styled.div`
     }
   }
 
+  @media screen and (prefers-reduced-motion: reduce) {
+    animation: fade-in 0.3s cubic-bezier(0.31, 1.18, 0.64, 1.05) 0s forwards;
+    transform: translate(-50%, 0%);
+
+    &.close {
+      animation: fade-out 0.3s cubic-bezier(0.42, -0.18, 0.82, 0.18) 0s forwards;
+    }
+
+    .apply-btn {
+      transition-property: background-color;
+
+      &:hover {
+        transform: unset;
+      }
+    }
+  }
+
   @media screen and (min-width: ${TABLET_BP}em) {
     border-radius: 1.5625rem;
     max-height: 28.965rem;
     top: 50%;
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, 110%);
 
     @keyframes slide-in {
       from {
@@ -214,6 +239,11 @@ const StyledDialog = styled.div`
       to {
         transform: translate(-50%, 150%);
       }
+    }
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      animation: fade-in 0.3s cubic-bezier(0.31, 1.18, 0.64, 1.05) 0s forwards;
+      transform: translate(-50%, -50%);
     }
 
     .settings-header-row {
@@ -277,9 +307,18 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
 
   const handleAnimationEnd = (event: any) => {
     event.stopPropagation();
-    if (event.animationName === 'slide-in') {
+    const isReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (
+      event.animationName === 'slide-in' ||
+      (isReducedMotion && event.animationName === 'fade-in')
+    ) {
       dialogRef.current.focus();
-    } else if (event.animationName === 'slide-out') {
+    } else if (
+      event.animationName === 'slide-out' ||
+      (isReducedMotion && event.animationName === 'fade-out')
+    ) {
       onClose();
     }
   };

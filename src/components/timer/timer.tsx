@@ -13,7 +13,7 @@ const animationDelay = 300;
 
 const pseudoElementMixin = css`
   border-radius: 50%;
-  box-shadow: 0rem 0rem 2.7rem 0.35rem #363b6f;
+  box-shadow: 0rem 0rem 2.7rem 0.35rem var(--timer-animation-ring-blue);
   content: '';
   position: absolute;
   top: 0;
@@ -27,7 +27,7 @@ const pseudoElementMixin = css`
 
 const StyledTimerButton = styled(Button)`
   border-radius: 50%;
-  background: var(--timer-gradient); //var(--darker-blue);
+  background: var(--timer-gradient);
   box-shadow: var(--timer-shadow);
   margin: 2.8125rem auto 0;
   height: 18.75rem;
@@ -106,13 +106,6 @@ const StyledTimerButton = styled(Button)`
     to {
       opacity: 0;
       transform: scale(1.5);
-    }
-  }
-
-  @media screen and (prefers-reduced-motion: reduce) {
-    &.active::before,
-    &.active::after {
-      display: none;
     }
   }
 
@@ -253,6 +246,30 @@ const StyledTimerButton = styled(Button)`
   @media screen and (min-width: ${DESKTOP_BP}em) {
     margin: 2.8125rem auto 0;
   }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    &.active::before,
+    &.active::after,
+    &.finished::before,
+    &.finished::after {
+      content: unset;
+    }
+
+    &.active,
+    &.paused,
+    &.finished {
+      animation: none;
+    }
+
+    &.active {
+      &::before {
+        box-shadow: 0rem 0rem 2.7rem 1.55rem var(--timer-animation-ring-blue);
+        content: '';
+        animation: fade-in 0.75s cubic-bezier(0.11, 0.45, 0.72, 1) 0s 2
+          alternate;
+      }
+    }
+  }
 `;
 
 const StyledProgressRing = styled(ProgressRing)`
@@ -271,6 +288,12 @@ const StyledProgressRing = styled(ProgressRing)`
   @media screen and (min-width: ${TABLET_BP}em) {
     circle {
       stroke-width: 0.6875rem;
+    }
+  }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    circle {
+      transition-duration: 0s;
     }
   }
 `;
@@ -328,7 +351,10 @@ const Timer = ({
 
   const handleClick = () => {
     if (!isTiming || isFinished) {
-      setTimeout(playStart, animationDelay);
+      const isReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+      isReducedMotion ? playStart() : setTimeout(playStart, animationDelay);
       onStart();
     } else {
       const mins = Math.floor(secondsLeft / 60);

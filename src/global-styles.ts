@@ -18,6 +18,7 @@ const GlobalStyles = createGlobalStyle`
     --darker-blue: #161932;
     --light-gray: #EFF1FA;
     --focus-blue: #1e5ee6;
+    --timer-animation-ring-blue: #363b6f; 
 
     --color-primary: var(--red-orange);
     --timer-gradient: linear-gradient(to bottom right, #0e112a, #2e335c);
