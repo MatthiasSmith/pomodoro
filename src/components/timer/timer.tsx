@@ -51,6 +51,11 @@ const StyledTimerButton = styled(Button)`
 
   &.paused {
     animation: pause-shrink 0.08s ease-in-out 0s 2 alternate;
+
+    &::before {
+      ${pseudoElementMixin}
+      animation: pause-ripple 0.72s cubic-bezier(0.11, 0.45, 0.72, 1) 0.06s;
+    }
   }
 
   &.finished {
@@ -81,7 +86,18 @@ const StyledTimerButton = styled(Button)`
       transform: scale(1);
     }
     to {
-      transform: scale(0.97);
+      transform: scale(0.98);
+    }
+  }
+
+  @keyframes pause-ripple {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.35);
     }
   }
 
@@ -105,7 +121,7 @@ const StyledTimerButton = styled(Button)`
     }
     to {
       opacity: 0;
-      transform: scale(1.5);
+      transform: scale(1.75);
     }
   }
 
@@ -332,8 +348,7 @@ const Timer = ({
     interrupt: true,
   });
   const [playPause] = useSound(pauseSFX, {
-    playbackRate: 1.85,
-    volume: 0.25,
+    volume,
     soundEnabled,
   });
 
