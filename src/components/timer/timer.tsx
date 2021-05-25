@@ -264,17 +264,18 @@ const StyledTimerButton = styled(Button)`
   }
 
   @media screen and (prefers-reduced-motion: reduce) {
-    &.active::before,
-    &.active::after,
-    &.finished::before,
-    &.finished::after {
-      content: unset;
-    }
-
     &.active,
     &.paused,
     &.finished {
       animation: none;
+    }
+
+    &.active::before,
+    &.active::after,
+    &.paused::before,
+    &.finished::before,
+    &.finished::after {
+      content: unset;
     }
 
     &.active {
