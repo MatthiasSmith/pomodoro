@@ -19,7 +19,9 @@ import { SettingsType } from './types/settings';
 const finishSFX = require('../public/sounds/timer-finish.mp3');
 
 const StyledMain = styled.main`
+  animation: fade-in 0.5s ease-out 0s forwards;
   margin: 0 auto;
+  opacity: 0;
   overflow: hidden;
   padding: 0 1.5rem;
   width: 100%;
