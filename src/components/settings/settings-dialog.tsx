@@ -1,7 +1,18 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
+import {
+  focusFirstTabbableElement,
+  getFocusableElements,
+} from '../../helpers/dialog-helper';
 import { SettingsType } from '../../types/settings';
 import { SettingsContext } from '../../providers/settings-provider';
 import { SoundSettingsContext } from '../../providers/sound-settings-provider';
@@ -94,9 +105,6 @@ const StyledDialog = styled.div`
 
     &:focus {
       outline: none;
-    }
-
-    &:focus-visible {
       border-radius: 0.25rem;
       box-shadow: 0rem 0rem 0rem 0.125rem var(--focus-blue);
     }
@@ -299,12 +307,22 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
   const [settingsCopy, setSettingsCopy] = useState<SettingsType>({
     ...settings,
   });
+  const dialogContainerRef = useRef(null);
   const backdropRef = useRef(null);
   const dialogRef = useRef(null);
   const [playClose] = useSound(closeSFX, {
     volume,
     soundEnabled,
   });
+  const [focusableEls, setFocusableEls]: [
+    Array<HTMLElement>,
+    Dispatch<SetStateAction<Array<HTMLElement>>>
+  ] = useState([]);
+
+  useEffect(
+    () => setFocusableEls(getFocusableElements(dialogContainerRef)),
+    []
+  );
 
   const handleAnimationEnd = (event: any) => {
     event.stopPropagation();
@@ -315,7 +333,7 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
       event.animationName === 'slide-in' ||
       (isReducedMotion && event.animationName === 'fade-in')
     ) {
-      dialogRef.current.focus();
+      focusFirstTabbableElement(focusableEls);
     } else if (
       event.animationName === 'slide-out' ||
       (isReducedMotion && event.animationName === 'fade-out')
@@ -334,6 +352,20 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
     event.stopPropagation();
     if (event.key === 'Escape') {
       handleClose();
+      return;
+    }
+
+    if (
+      event.shiftKey &&
+      event.key === 'Tab' &&
+      focusableEls[0] === document.activeElement
+    ) {
+      focusableEls[focusableEls.length - 2].focus();
+    } else if (
+      event.key === 'Tab' &&
+      focusableEls[focusableEls.length - 1] === document.activeElement
+    ) {
+      focusableEls[1].focus();
     }
   };
 
@@ -365,15 +397,19 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <>
+    <div
+      className='dialog-container'
+      onKeyUp={handleKeyUp}
+      ref={dialogContainerRef}
+    >
       <StyledDialogBackdrop ref={backdropRef} />
+      <div className='tab-focus-trap' tabIndex={0}></div>
       <StyledDialog
-        ref={dialogRef}
-        tabIndex={-1}
-        onKeyUp={handleKeyUp}
         onAnimationEnd={handleAnimationEnd}
         role='dialog'
+        aria-modal='true'
         aria-labelledby='settingsHeading'
+        ref={dialogRef}
       >
         <div className='settings-header-row flex-row space-between'>
           <h2 id='settingsHeading' className='settings-heading'>
@@ -504,7 +540,8 @@ const SettingsDialog = ({ onClose }: { onClose: () => void }) => {
           </Button>
         </form>
       </StyledDialog>
-    </>
+      <div className='tab-focus-trap' tabIndex={0}></div>
+    </div>
   );
 };
 
