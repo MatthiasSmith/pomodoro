@@ -22,12 +22,16 @@ const StyledMain = styled.main`
   animation: fade-in 0.5s ease-out 0s forwards;
   margin: 0 auto;
   opacity: 0;
-  overflow: hidden;
   padding: 0 1.5rem;
   width: 100%;
 
+  @media screen and (hover: hover) {
+    overflow: hidden;
+  }
+
   @media screen and (min-width: ${TABLET_BP}em) {
     padding: 0;
+    overflow: unset;
   }
 `;
 
