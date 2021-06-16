@@ -1,4 +1,4 @@
-export default interface ActionsType {
+export default interface TimerChoicesType {
   pomodoro: boolean;
   shortBreak: boolean;
   longBreak: boolean;

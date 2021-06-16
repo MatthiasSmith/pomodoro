@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import ActionChoice from './action-choice';
-import ActionsType from '../../types/actions';
+import TimerChoice from './timer-choice';
+import TimerChoicesType from '../../types/timer-choices';
 import { TABLET_BP } from '../../constants/breakpoints';
 import { SoundSettingsContext } from '../../providers/sound-settings-provider';
 
@@ -11,10 +11,10 @@ const clickSFX = require('../../../public/sounds/snap.mp3');
 const transitionDuration = 300;
 
 interface ActionProps {
-  actions: ActionsType;
+  actions: TimerChoicesType;
 }
 
-const StyledPomodoroAction = styled.fieldset<ActionProps>`
+const StyledTimerChoices = styled.fieldset<ActionProps>`
   background-color: var(--darker-blue);
   border: none;
   border-radius: 1.96875rem;
@@ -65,7 +65,7 @@ const StyledPomodoroAction = styled.fieldset<ActionProps>`
   }
 `;
 
-const PomodoroActions = ({
+const TimerChoices = ({
   actions,
   onChange,
 }: {
@@ -91,22 +91,22 @@ const PomodoroActions = ({
   };
 
   return (
-    <StyledPomodoroAction actions={actions} className='flex-row space-between'>
-      <ActionChoice
+    <StyledTimerChoices actions={actions} className='flex-row space-between'>
+      <TimerChoice
         id='pomodoro'
         name='action'
         value='pomodoro'
         isSelected={actions.pomodoro}
         onChange={handleChange}
       />
-      <ActionChoice
+      <TimerChoice
         id='shortBreak'
         name='action'
         value='short break'
         isSelected={actions.shortBreak}
         onChange={handleChange}
       />
-      <ActionChoice
+      <TimerChoice
         id='longBreak'
         name='action'
         value='long break'
@@ -114,8 +114,8 @@ const PomodoroActions = ({
         onChange={handleChange}
       />
       <div id='shifting-marker' className='shifting-marker'></div>
-    </StyledPomodoroAction>
+    </StyledTimerChoices>
   );
 };
 
-export default PomodoroActions;
+export default TimerChoices;

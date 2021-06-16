@@ -3,20 +3,20 @@ import styled from 'styled-components';
 
 import { TABLET_BP } from '../../constants/breakpoints';
 
-interface ActionChoiceProps {
+interface TimerChoiceProps {
   isSelected?: boolean;
 }
 
-const StyledActionChoice = styled.div<ActionChoiceProps>`
+const StyledTimerChoice = styled.div<TimerChoiceProps>`
   position: relative;
   z-index: 1;
   -webkit-tap-highlight-color: transparent;
 
-  &:hover .action-choice__label {
+  &:hover .timer-choice__label {
     opacity: 1;
   }
 
-  .action-choice__radio {
+  .timer-choice__radio {
     appearance: none;
     border: none;
     border-radius: 1.65625rem;
@@ -35,7 +35,7 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
     }
   }
 
-  .action-choice__label {
+  .timer-choice__label {
     color: ${(props) =>
       props.isSelected ? 'var(--dark-blue)' : 'var(--light-blue)'};
     cursor: pointer;
@@ -53,18 +53,18 @@ const StyledActionChoice = styled.div<ActionChoiceProps>`
   }
 
   @media screen and (min-width: ${TABLET_BP}em) {
-    .action-choice__radio {
+    .timer-choice__radio {
       min-width: 7.5rem;
     }
 
-    .action-choice__label {
+    .timer-choice__label {
       font-size: 0.875rem;
       line-height: 0.875rem;
     }
   }
 `;
 
-const ActionChoice = ({
+const TimerChoice = ({
   id,
   name,
   value,
@@ -82,9 +82,9 @@ const ActionChoice = ({
   };
 
   return (
-    <StyledActionChoice isSelected={isSelected}>
+    <StyledTimerChoice isSelected={isSelected}>
       <input
-        className='action-choice__radio'
+        className='timer-choice__radio'
         id={id}
         type='radio'
         name={name}
@@ -92,11 +92,11 @@ const ActionChoice = ({
         checked={isSelected}
         onChange={handleChange}
       />
-      <label htmlFor={id} className='action-choice__label'>
+      <label htmlFor={id} className='timer-choice__label'>
         {value}
       </label>
-    </StyledActionChoice>
+    </StyledTimerChoice>
   );
 };
 
-export default ActionChoice;
+export default TimerChoice;

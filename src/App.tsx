@@ -5,10 +5,10 @@ import useSound from 'use-sound';
 import GlobalStyles from './global-styles';
 import Theme from './theme';
 import Header from './components/header';
-import PomodoroActions from './components/pomodoro-actions/pomodoro-actions';
+import TimerChoices from './components/timer-choices/timer-choices';
 import Timer from './components/timer/timer';
 import SettingsDialog from './components/settings/settings-dialog';
-import ActionsType from './types/actions';
+import TimerChoicesType from './types/timer-choices';
 import SoundToggle from './components/sound-toggle';
 import SettingsButton from './components/settings/settings-button';
 import { DESKTOP_BP, TABLET_BP } from './constants/breakpoints';
@@ -61,7 +61,7 @@ const App = () => {
   const [timerProgress, setTimerProgress] = useState(100);
   const [isTiming, setIsTiming] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [actions, setActions] = useState<ActionsType>({
+  const [actions, setActions] = useState<TimerChoicesType>({
     pomodoro: true,
     shortBreak: false,
     longBreak: false,
@@ -140,7 +140,7 @@ const App = () => {
 
   const getCurrentAction = () => {
     return Object.keys(actions).filter(
-      (key) => actions[key as keyof ActionsType]
+      (key) => actions[key as keyof TimerChoicesType]
     )[0];
   };
 
@@ -155,10 +155,10 @@ const App = () => {
     setIsFinished(false);
     setIsTiming(false);
 
-    const updatedActions: ActionsType = { ...actions };
+    const updatedActions: TimerChoicesType = { ...actions };
     Object.keys(updatedActions).forEach(
       (key) =>
-        (updatedActions[key as keyof ActionsType] =
+        (updatedActions[key as keyof TimerChoicesType] =
           event.target.id === key ? true : false)
     );
     setActions({ ...updatedActions });
@@ -204,7 +204,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <StyledMain>
           <SoundToggle />
-          <PomodoroActions actions={actions} onChange={handleActionChange} />
+          <TimerChoices actions={actions} onChange={handleActionChange} />
           <Timer
             actionType={getCurrentAction()}
             secondsLeft={secondsLeft}
