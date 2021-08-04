@@ -361,14 +361,6 @@ const Timer = ({
     [clientWidth]
   );
 
-  // update the aria timer when seconds hit the minute mark
-  useEffect(() => {
-    if (minutes <= 0 && seconds <= 0) return;
-    if (seconds === 0) {
-      updateAriaTime();
-    }
-  }, [secondsLeft]);
-
   // update the aria timer when action types change
   useEffect(() => updateAriaTime(), [actionType]);
 
