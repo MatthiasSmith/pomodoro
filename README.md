@@ -26,14 +26,16 @@ Users should be able to:
 - See a circular progress bar that represents how far through their timer they are
 - Customize the appearance of the app with the ability to set preferences for colors and fonts
 
-### Bonus challenges for myself
+### Extra challenges I added
 
-Users should also be able to:
+Users should be able to:
 
+- See animations when interacting with different elements on the page
+- See reduced animations when using reduced motion settings on their OS
 - Hear sound effects while interacting with the interface and when the timer finishes
 - Toggle sounds on/off
-- Be able to navigate the app using a keyboard only
-- When using voice over, hear timer status updates once per minute and when starting, pausing, or completing a timer
+- Navigate the app using a keyboard only
+- Use a screen reader / voice over assistant to hear timer status updates when starting, pausing and completing timers
 
 ### Screenshot
 
@@ -57,21 +59,22 @@ Users should also be able to:
 - [Styled Components](https://styled-components.com/) - For styles
 - [useSound](https://www.npmjs.com/package/use-sound) - React hook for using sounds
 - React Context API - for managing application state
+- React custom hooks - to help listen for screen size changes
 
 ### What I learned
 
 I increased my knowledge and skills with TypeScript, React, and application state during this project's development, but I'd have to say my two main takeaways from doing it are:
 
-1. Building with accessibility in mind by adding it throughout application development is a much better approach than just adding it in at the end. Doing so helped me discover "gotchyas" with my markup and application state earlier on than if I hadn't.
-2. Adding sounds to web apps is much easier than I thought it would be, and can be used to raise the user experience to a new level.
+1. Building with accessibility in mind by adding it throughout application development is a much better approach than just adding it in at the end. Similar to mobile-first workflows, doing this helped me discover "gotchyas" within my markup and application code earlier on in the development process.
+2. Adding sounds to web apps is much easier than I thought it would be, and better yet, can actually *improve* user's experiences.
 
-    I've always steered away from adding sound effects into web apps because of a sense that they're generally frowned upon, and also because I thought it would be more difficult to do so.
+    I haven't added sound effects into web apps before because I felt that they often hinder and annoy users, and because I thought it'd be difficult to do.
     
     However, what I found here was the opposite. 
     
-    For one thing, I personally feel that sound effects add something to this experience — giving it that extra bit of polish and thought. Like when you set a timer and move onto another browser tab to complete some work and your timer expires. Hearing a chime to indicate that it's completed is just the sort of thing that sounds do well while not being overbearing. That being said, I wouldn't use the sounds in an office environment without headphones.
+    - For one thing, I personally feel that the sound effects add something to this application — giving it that extra bit of polish and thoughtfulness. Because when I'm using a pomodoro timer, I'm not staring at it — I'm off working in other browser tabs. Hearing the chime indicate that my timer has finished is really helpful. It's just the sort of thing that sounds do well while not overdoing it.
     
-    Secondly, adding sounds was a straightforward process, and I was able to do so rather quickly. Finding and choosing sounds on the other hand, took way longer than I care to admit. 😅  
+    - Furthermore, adding sounds was a straightforward process, and I was able to do so rather quickly. Finding and choosing sounds on the other hand, took way longer than I care to admit. 😅  
 
 ### Useful resources
 
