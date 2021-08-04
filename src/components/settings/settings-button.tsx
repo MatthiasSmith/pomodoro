@@ -12,10 +12,6 @@ const openSFX = require('../../../public/sounds/open-settings.mp3');
 const StyledSettingsButton = styled(Button)`
   transition: transform 0.3s ease-out;
 
-  &:hover {
-    transform: rotate(90deg) scale(1.1);
-  }
-
   svg > path {
     transition: opacity 0.3s ease-out;
   }
@@ -30,6 +26,12 @@ const StyledSettingsButton = styled(Button)`
     border-radius: 0.25rem;
     box-shadow: 0rem 0rem 0rem 0.125rem var(--darker-blue),
       0rem 0rem 0rem 0.25rem rgba(255, 255, 255, 0.38);
+  }
+
+  @media screen and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: rotate(90deg) scale(1.1);
+    }
   }
 `;
 
