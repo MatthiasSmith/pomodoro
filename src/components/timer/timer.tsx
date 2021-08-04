@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import useSound from 'use-sound';
 
+import useCurrentWidth from '../../hooks/use-current-width';
 import { TABLET_BP, DESKTOP_BP } from '../../constants/breakpoints';
 import { SoundSettingsContext } from '../../providers/sound-settings-provider';
 import Button from '../button';
@@ -332,11 +333,14 @@ const Timer = ({
   isTiming: boolean;
   isFinished: boolean;
 }) => {
+  const smRadius = 137.51;
+  const lgRadius = 180.5;
+  const clientWidth = useCurrentWidth();
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft - minutes * 60;
   const [ariaMinutesLeft, setAriaMinutesLeft] = useState(minutes);
   const [ariaSecondsLeft, setAriaSecondsLeft] = useState(seconds);
-  const [radius, setRadius] = useState(137.51);
+  const [radius, setRadius] = useState(smRadius);
   const {
     soundSettings: { volume, soundEnabled },
   } = useContext(SoundSettingsContext);
@@ -351,10 +355,11 @@ const Timer = ({
     soundEnabled,
   });
 
-  useEffect(() => {
-    const isSmScreen = document.documentElement.clientWidth < TABLET_BP * 16;
-    setRadius(isSmScreen ? 137.51 : 180.5);
-  }, []);
+  // set circle radius when client width changes
+  useEffect(
+    () => setRadius(clientWidth < TABLET_BP * 16 ? smRadius : lgRadius),
+    [clientWidth]
+  );
 
   // update the aria timer when seconds hit the minute mark
   useEffect(() => {
